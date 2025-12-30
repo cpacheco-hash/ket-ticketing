@@ -1,0 +1,432 @@
+// Prisma Schema para KET Ticketing Platform
+// Database: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// AUTH & USERS
+// ============================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  phone     String?  @unique
+  firstName String
+  lastName  String
+  avatar    String?
+
+  // Social auth
+  emailVerified DateTime?
+  phoneVerified DateTime?
+
+  // Music integrations
+  spotifyConnected    Boolean @default(false)
+  spotifyId          String?  @unique
+  spotifyAccessToken String?
+  spotifyRefreshToken String?
+
+  appleMusicConnected Boolean @default(false)
+  appleMusicId       String?  @unique
+  appleMusicToken    String?
+
+  // Relations
+  accounts    Account[]
+  sessions    Session[]
+  orders      Order[]
+  tickets     Ticket[]
+  following   Follow[]
+  sentTransfers     Transfer[] @relation("TransferFrom")
+  receivedTransfers Transfer[] @relation("TransferTo")
+  waitlists   Waitlist[]
+  wallet      Wallet?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([spotifyId])
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ============================================================================
+// EVENTS & VENUES
+// ============================================================================
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  slug        String   @unique
+
+  // Venue & Artist
+  venueId     String
+  venue       Venue    @relation(fields: [venueId], references: [id])
+  artistId    String
+  artist      Artist   @relation(fields: [artistId], references: [id])
+
+  // Event details
+  date        DateTime
+  doors       DateTime
+  price       Int // in CLP cents
+  currency    String   @default("CLP")
+
+  // Inventory
+  totalTickets     Int
+  availableTickets Int
+
+  // Media
+  images      String[]
+  genres      String[]
+
+  // Status
+  status      EventStatus @default(UPCOMING)
+
+  // Relations
+  orders      Order[]
+  tickets     Ticket[]
+  waitlists   Waitlist[]
+  followers   Follow[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([date])
+  @@index([status])
+  @@map("events")
+}
+
+enum EventStatus {
+  UPCOMING
+  ON_SALE
+  SOLD_OUT
+  CANCELLED
+  COMPLETED
+}
+
+model Venue {
+  id       String  @id @default(cuid())
+  name     String
+  slug     String  @unique
+  address  String
+  city     String
+  capacity Int
+  lat      Float?
+  lng      Float?
+  image    String?
+
+  // Relations
+  events    Event[]
+  followers Follow[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@map("venues")
+}
+
+model Artist {
+  id            String  @id @default(cuid())
+  name          String
+  slug          String  @unique
+  spotifyId     String? @unique
+  appleMusicId  String?
+  genres        String[]
+  image         String?
+  bio           String?
+
+  // Relations
+  events    Event[]
+  followers Follow[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([spotifyId])
+  @@map("artists")
+}
+
+model Follow {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Polymorphic follow
+  eventId  String?
+  event    Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  venueId  String?
+  venue    Venue?  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  artistId String?
+  artist   Artist? @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, eventId])
+  @@unique([userId, venueId])
+  @@unique([userId, artistId])
+  @@map("follows")
+}
+
+// ============================================================================
+// ORDERS & PAYMENTS
+// ============================================================================
+
+model Order {
+  id       String @id @default(cuid())
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  eventId  String
+  event    Event  @relation(fields: [eventId], references: [id])
+
+  // Order details
+  quantity  Int
+  unitPrice Int // in CLP cents
+  total     Int // in CLP cents
+  currency  String @default("CLP")
+
+  // Payment
+  paymentMethod PaymentMethod
+  paymentStatus PaymentStatus @default(PENDING)
+
+  // Relations
+  payment Payment?
+  tickets Ticket[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([eventId])
+  @@map("orders")
+}
+
+enum PaymentMethod {
+  FINTOC
+  CARD
+  WALLET
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id         String  @id @default(cuid())
+  orderId    String  @unique
+  order      Order   @relation(fields: [orderId], references: [id])
+
+  provider   PaymentProvider
+  providerId String // External payment ID
+  amount     Int
+  status     PaymentStatus @default(PENDING)
+  metadata   Json?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([providerId])
+  @@map("payments")
+}
+
+enum PaymentProvider {
+  FINTOC
+  STRIPE
+  MERCADOPAGO
+}
+
+// ============================================================================
+// TICKETS & QR
+// ============================================================================
+
+model Ticket {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
+
+  // QR Code
+  qrCode     String  @unique
+  qrSecret   String // Secret for signature
+
+  // Status
+  status     TicketStatus @default(ACTIVE)
+
+  // Timestamps
+  activatedAt DateTime?
+  scannedAt   DateTime?
+
+  // Relations
+  transfers Transfer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([eventId])
+  @@index([qrCode])
+  @@map("tickets")
+}
+
+enum TicketStatus {
+  ACTIVE
+  USED
+  TRANSFERRED
+  CANCELLED
+  REFUNDED
+}
+
+model Transfer {
+  id       String @id @default(cuid())
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+
+  fromUserId String
+  fromUser   User   @relation("TransferFrom", fields: [fromUserId], references: [id])
+  toUserId   String
+  toUser     User   @relation("TransferTo", fields: [toUserId], references: [id])
+
+  status    TransferStatus @default(PENDING)
+  acceptedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([ticketId])
+  @@map("transfers")
+}
+
+enum TransferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+// ============================================================================
+// WAITLIST
+// ============================================================================
+
+model Waitlist {
+  id      String @id @default(cuid())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  status    WaitlistStatus @default(WAITING)
+  notifiedAt DateTime?
+  expiresAt  DateTime? // 15 min window to purchase
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, eventId])
+  @@index([eventId, status])
+  @@map("waitlists")
+}
+
+enum WaitlistStatus {
+  WAITING
+  NOTIFIED
+  PURCHASED
+  EXPIRED
+  REMOVED
+}
+
+// ============================================================================
+// WALLET
+// ============================================================================
+
+model Wallet {
+  id      String @id @default(cuid())
+  userId  String @unique
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  balance Int @default(0) // in CLP cents
+  credits Int @default(0) // promotional credits
+
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("wallets")
+}
+
+model Transaction {
+  id       String @id @default(cuid())
+  walletId String
+  wallet   Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  type     TransactionType
+  amount   Int // in CLP cents (negative for debit)
+  balance  Int // balance after transaction
+
+  description String?
+  metadata    Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([walletId])
+  @@map("transactions")
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  PURCHASE
+  REFUND
+  CREDIT
+}
