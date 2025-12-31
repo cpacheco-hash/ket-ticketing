@@ -1,0 +1,234 @@
+'use client'
+
+import { useState } from 'react'
+import { AppLayout, Header } from '@/components/layout'
+import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+
+export default function CreateEventPage() {
+  const [formData, setFormData] = useState({
+    title: '',
+    artist: '',
+    venue: '',
+    date: '',
+    doors: '',
+    price: '',
+    totalTickets: '',
+    description: '',
+    genres: ''
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('Create event:', formData)
+    // TODO: Implement event creation
+  }
+
+  return (
+    <AppLayout>
+      <Header title="Nuevo Concierto" />
+
+      <div className="p-6 max-w-4xl">
+        <Card className="border-border bg-card p-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Basic Info */}
+            <div>
+              <h2 className="text-lg font-semibold text-foreground mb-4">Información Básica</h2>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label htmlFor="title" className="block text-sm font-medium text-foreground mb-2">
+                    Nombre del Evento *
+                  </label>
+                  <input
+                    id="title"
+                    name="title"
+                    type="text"
+                    value={formData.title}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Ej: Festival Sónar 2024"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="artist" className="block text-sm font-medium text-foreground mb-2">
+                    Artista Principal *
+                  </label>
+                  <input
+                    id="artist"
+                    name="artist"
+                    type="text"
+                    value={formData.artist}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Ej: The Weeknd"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="venue" className="block text-sm font-medium text-foreground mb-2">
+                    Lugar *
+                  </label>
+                  <input
+                    id="venue"
+                    name="venue"
+                    type="text"
+                    value={formData.venue}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Ej: Movistar Arena"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="genres" className="block text-sm font-medium text-foreground mb-2">
+                    Género Musical *
+                  </label>
+                  <input
+                    id="genres"
+                    name="genres"
+                    type="text"
+                    value={formData.genres}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Ej: Electrónica, House"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Date & Time */}
+            <div>
+              <h2 className="text-lg font-semibold text-foreground mb-4">Fecha y Hora</h2>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label htmlFor="date" className="block text-sm font-medium text-foreground mb-2">
+                    Fecha del Evento *
+                  </label>
+                  <input
+                    id="date"
+                    name="date"
+                    type="datetime-local"
+                    value={formData.date}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="doors" className="block text-sm font-medium text-foreground mb-2">
+                    Apertura de Puertas *
+                  </label>
+                  <input
+                    id="doors"
+                    name="doors"
+                    type="datetime-local"
+                    value={formData.doors}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Tickets & Pricing */}
+            <div>
+              <h2 className="text-lg font-semibold text-foreground mb-4">Tickets y Precios</h2>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label htmlFor="price" className="block text-sm font-medium text-foreground mb-2">
+                    Precio (CLP) *
+                  </label>
+                  <input
+                    id="price"
+                    name="price"
+                    type="number"
+                    value={formData.price}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Ej: 45000"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="totalTickets" className="block text-sm font-medium text-foreground mb-2">
+                    Cantidad Total de Tickets *
+                  </label>
+                  <input
+                    id="totalTickets"
+                    name="totalTickets"
+                    type="number"
+                    value={formData.totalTickets}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Ej: 500"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Description */}
+            <div>
+              <label htmlFor="description" className="block text-sm font-medium text-foreground mb-2">
+                Descripción del Evento *
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                rows={4}
+                className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                placeholder="Describe el evento, artistas, actividades, etc."
+                required
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-4 justify-end pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                className="border-border hover:bg-secondary"
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                Crear Evento
+              </Button>
+            </div>
+          </form>
+        </Card>
+
+        {/* Info Card */}
+        <Card className="mt-6 border-border bg-card/30 p-4">
+          <h4 className="mb-2 font-semibold text-foreground">Información para Productores</h4>
+          <ul className="space-y-1 text-sm text-muted-foreground">
+            <li>• Los eventos creados estarán sujetos a revisión antes de publicarse</li>
+            <li>• Comisión por ticket: 5% + CLP $500 (transparente, sin costos ocultos)</li>
+            <li>• Pagos procesados con Fintoc para mayor seguridad</li>
+            <li>• Acceso al panel de analytics en tiempo real</li>
+          </ul>
+        </Card>
+      </div>
+    </AppLayout>
+  )
+}
