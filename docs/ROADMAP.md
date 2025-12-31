@@ -10,19 +10,19 @@
 - [ ] Investigar integraciones (Spotify, Apple Music, Fintoc)
 
 ### Diseño UX/UI
-- [ ] Wireframes de flujos principales
-  - [ ] Onboarding y registro
-  - [ ] Descubrimiento de eventos
-  - [ ] Detalle de evento
-  - [ ] Checkout
-  - [ ] Billetera de tickets
+- [x] Wireframes de flujos principales
+  - [x] Onboarding y registro
+  - [x] Descubrimiento de eventos
+  - [x] Detalle de evento
+  - [x] Checkout
+  - [x] Billetera de tickets
   - [ ] Transferencia de tickets
-- [ ] Diseño UI en Figma
-  - [ ] Design system
-  - [ ] Componentes
-  - [ ] Pantallas móviles
-  - [ ] Pantallas desktop
-- [ ] Prototipo interactivo
+- [x] Diseño UI implementado
+  - [x] Design system (dark theme + cyan)
+  - [x] Componentes base
+  - [x] Pantallas móviles
+  - [x] Pantallas desktop
+- [x] Prototipo interactivo (wireframes implementados en código)
 
 ### Compliance y Legal
 - [ ] Definir datos mínimos (PII)
@@ -34,8 +34,8 @@
 ### Setup Técnico
 - [x] Inicializar repositorio Git
 - [x] Crear documentación inicial
-- [ ] Setup proyecto Next.js
-- [ ] Configurar Prisma + PostgreSQL
+- [x] Setup proyecto Next.js
+- [x] Configurar Prisma + PostgreSQL (schema completo)
 - [ ] Setup CI/CD (GitHub Actions)
 - [ ] Configurar ambientes (dev, staging, prod)
 
