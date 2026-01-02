@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { AppLayout, Header } from '@/components/layout'
+import { AppLayout, PageHeader } from '@/components/layout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { UserCircleIcon } from 'lucide-react'
@@ -50,7 +50,7 @@ export default function ProfilePage() {
 
   return (
     <AppLayout>
-      <Header title="Mi Perfil" />
+      <PageHeader title="Mi Perfil" />
 
       <div className="p-6 max-w-3xl mx-auto">
         <Card className="border-border bg-card p-6">

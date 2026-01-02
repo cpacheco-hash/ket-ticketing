@@ -2,7 +2,7 @@
 
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { AppLayout, Header } from '@/components/layout'
+import { AppLayout, PageHeader } from '@/components/layout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
@@ -39,7 +39,7 @@ export default function SettingsPage() {
 
   return (
     <AppLayout>
-      <Header title="Configuración" />
+      <PageHeader title="Configuración" />
 
       <div className="p-6 max-w-3xl mx-auto space-y-6">
         {/* Account Settings */}

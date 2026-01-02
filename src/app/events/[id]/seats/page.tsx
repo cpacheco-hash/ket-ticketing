@@ -1,6 +1,6 @@
 'use client'
 
-import { AppLayout, Header } from '@/components/layout'
+import { AppLayout, PageHeader } from '@/components/layout'
 import { SeatSelector } from '@/components/seating/SeatSelector'
 import { useRouter } from 'next/navigation'
 
@@ -15,7 +15,7 @@ export default function EventSeatsPage() {
 
   return (
     <AppLayout>
-      <Header title="Selección de Asientos" />
+      <PageHeader title="Selección de Asientos" />
 
       <div className="p-6">
         <SeatSelector

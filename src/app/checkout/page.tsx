@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { AppLayout, Header } from '@/components/layout'
+import { AppLayout, PageHeader } from '@/components/layout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/store/cart'
@@ -88,7 +88,7 @@ export default function CheckoutPage() {
 
   return (
     <AppLayout>
-      <Header title="Checkout" />
+      <PageHeader title="Checkout" />
 
       <div className="p-6 max-w-5xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-6">
