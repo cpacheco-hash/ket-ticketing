@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { AppLayout, Header } from '@/components/layout'
+import { AppLayout } from '@/components/layout'
 import { EventCard } from '@/components/events/EventCard'
 import { formatDate } from '@/lib/format'
 
@@ -21,9 +20,9 @@ interface Event {
 }
 
 export default function EventsPage() {
-  const router = useRouter()
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
+  const [activeFilter, setActiveFilter] = useState('All')
 
   useEffect(() => {
     fetchEvents()
@@ -43,56 +42,98 @@ export default function EventsPage() {
     }
   }
 
+  const filters = ['All', 'Music', 'Arts', 'Comedy', 'Film']
+
   return (
     <AppLayout>
-      <Header
-        title="Próximos Eventos"
-        action={{
-          label: 'Crear Nuevo Concierto',
-          onClick: () => router.push('/create')
-        }}
-      />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        {/* Hero Section */}
+        <div className="mb-20">
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter uppercase mb-6 leading-[0.9]">
+            Don't Miss
+            <br />
+            <span
+              className="text-transparent stroke-white stroke-2"
+              style={{
+                WebkitTextStroke: '2px white',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              The Moment
+            </span>
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-400 max-w-2xl font-medium">
+            Discover the best gigs, clubs, and festivals happening in your city.
+            No booking fees, ever.
+          </p>
+        </div>
 
-      <div className="p-6">
+        {/* Filters / Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-white/20 pb-6">
+          <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-tight mb-4 md:mb-0">
+            Trending Now
+          </h2>
+          <div className="flex space-x-4 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+            {filters.map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setActiveFilter(filter)}
+                className={`px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wide whitespace-nowrap transition-colors ${
+                  activeFilter === filter
+                    ? 'bg-white text-black'
+                    : 'bg-transparent text-white border border-white/30 hover:border-white'
+                }`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Events Grid */}
         {loading ? (
-          <div className="flex items-center justify-center py-12">
+          <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-              <p className="text-muted-foreground">Cargando eventos...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4" />
+              <p className="text-gray-400">Loading events...</p>
             </div>
           </div>
+        ) : events.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+            {events.map((event) => (
+              <EventCard
+                key={event.id}
+                id={event.id}
+                title={event.title}
+                artist={event.artist.name}
+                venue={event.venue.name}
+                date={formatDate(event.date)}
+                image={event.images[0] || ''}
+                price={event.price / 100}
+              />
+            ))}
+          </div>
         ) : (
-          <>
-            {/* Events Grid */}
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {events.map((event) => (
-                <EventCard
-                  key={event.id}
-                  id={event.id}
-                  title={event.title}
-                  artist={event.artist.name}
-                  venue={event.venue.name}
-                  date={formatDate(event.date)}
-                  image={event.images[0] || ''}
-                  price={event.price / 100}
-                />
-              ))}
-            </div>
-
-            {/* Empty State */}
-            {events.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-lg text-muted-foreground mb-4">
-                  No hay eventos disponibles
-                </p>
-                <button className="text-primary hover:underline">
-                  Conecta tu Spotify para ver recomendaciones personalizadas
-                </button>
-              </div>
-            )}
-          </>
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <h3 className="text-2xl font-bold text-white mb-4">No events yet</h3>
+            <p className="text-gray-400 mb-8">
+              Check back soon or connect your Spotify for personalized recommendations
+            </p>
+          </div>
         )}
-      </div>
+
+        {/* Footer CTA */}
+        {events.length > 0 && (
+          <div className="mt-32 text-center border-t border-white/20 pt-20 pb-10">
+            <h3 className="text-4xl md:text-5xl font-black uppercase mb-8">
+              Want to see more?
+            </h3>
+            <button className="px-12 py-4 bg-white text-black text-lg font-bold rounded-full hover:bg-gray-200 transition-colors uppercase tracking-widest">
+              View All Events
+            </button>
+          </div>
+        )}
+      </main>
     </AppLayout>
   )
 }

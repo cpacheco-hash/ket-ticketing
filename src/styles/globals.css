@@ -4,50 +4,50 @@
 
 @layer base {
   :root {
-    /* KET Dark Theme - Default */
-    --background: 210 30% 8%;
-    --foreground: 0 0% 98%;
-    --card: 210 25% 12%;
-    --card-foreground: 0 0% 98%;
-    --popover: 210 25% 12%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 189 100% 50%;
-    --primary-foreground: 210 30% 8%;
-    --secondary: 210 20% 20%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 210 20% 18%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 189 100% 50%;
-    --accent-foreground: 210 30% 8%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 210 20% 25%;
-    --input: 210 20% 20%;
-    --ring: 189 100% 50%;
-    --radius: 0.75rem;
+    /* KET - DICE.FM Inspired Theme - Pure Black & White */
+    --background: 0 0% 0%;           /* Pure Black */
+    --foreground: 0 0% 100%;         /* Pure White */
+    --card: 0 0% 0%;                 /* Pure Black */
+    --card-foreground: 0 0% 100%;    /* Pure White */
+    --popover: 0 0% 0%;              /* Pure Black */
+    --popover-foreground: 0 0% 100%; /* Pure White */
+    --primary: 0 0% 100%;            /* White for primary actions */
+    --primary-foreground: 0 0% 0%;   /* Black text on white buttons */
+    --secondary: 0 0% 10%;           /* Very dark gray */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 5%;                /* Near black */
+    --muted-foreground: 0 0% 60%;    /* Gray for muted text */
+    --accent: 0 0% 100%;             /* White */
+    --accent-foreground: 0 0% 0%;    /* Black */
+    --destructive: 0 84% 60%;        /* Red for errors */
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 20%;              /* Dark gray borders */
+    --input: 0 0% 0%;                /* Black inputs */
+    --ring: 0 0% 100%;               /* White focus ring */
+    --radius: 9999px;                /* Full rounded for pills/buttons */
   }
 
   .dark {
-    /* Same as root - KET is dark by default */
-    --background: 210 30% 8%;
-    --foreground: 0 0% 98%;
-    --card: 210 25% 12%;
-    --card-foreground: 0 0% 98%;
-    --popover: 210 25% 12%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 189 100% 50%;
-    --primary-foreground: 210 30% 8%;
-    --secondary: 210 20% 20%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 210 20% 18%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 189 100% 50%;
-    --accent-foreground: 210 30% 8%;
+    /* Same as root - KET is pure black by default */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 5%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 100%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 210 20% 25%;
-    --input: 210 20% 20%;
-    --ring: 189 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 20%;
+    --input: 0 0% 0%;
+    --ring: 0 0% 100%;
   }
 }
 
@@ -56,6 +56,15 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-black text-white font-sans selection:bg-white selection:text-black;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

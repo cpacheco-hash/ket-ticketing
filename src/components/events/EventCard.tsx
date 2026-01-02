@@ -2,8 +2,6 @@
 
 import { useRouter } from 'next/navigation'
 import { CalendarIcon, MapPinIcon } from 'lucide-react'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 
 interface EventCardProps {
@@ -20,57 +18,62 @@ export function EventCard({ id, title, artist, venue, date, image, price }: Even
   const router = useRouter()
 
   return (
-    <Card className="overflow-hidden border-border bg-card hover:border-primary/50 transition-colors cursor-pointer" onClick={() => router.push(`/events/${id}`)}>
-      {/* Event Image */}
-      <div className="relative h-48 w-full bg-muted">
+    <div className="group flex flex-col w-full bg-black cursor-pointer" onClick={() => router.push(`/events/${id}`)}>
+      {/* Image Container */}
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl mb-6 bg-gray-900">
         {image ? (
           <Image
             src={image}
-            alt={title}
+            alt={`${title} - ${artist}`}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-muted-foreground">
+          <div className="flex h-full items-center justify-center text-gray-500">
             Sin imagen
           </div>
         )}
+
+        {/* Price Tag Overlay */}
+        <div className="absolute top-4 right-4 bg-white text-black font-bold px-3 py-1 rounded-full text-sm">
+          ${price.toLocaleString('es-CL')}
+        </div>
       </div>
 
-      {/* Event Info */}
-      <div className="p-4">
-        <h3 className="text-lg font-bold text-foreground mb-1">{title}</h3>
-        <p className="text-sm text-muted-foreground mb-3">{artist}</p>
+      {/* Content */}
+      <div className="flex flex-col flex-grow space-y-3">
+        <h3 className="text-3xl font-bold text-white leading-tight group-hover:underline decoration-2 underline-offset-4">
+          {title}
+        </h3>
 
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center gap-2 text-sm text-foreground">
-            <CalendarIcon className="h-4 w-4 text-primary" />
+        <p className="text-lg text-gray-400 font-medium">
+          {artist}
+        </p>
+
+        <div className="flex flex-col space-y-1 text-gray-400">
+          <div className="flex items-center text-sm font-medium">
+            <CalendarIcon className="w-4 h-4 mr-2" />
             <span>{date}</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-foreground">
-            <MapPinIcon className="h-4 w-4 text-primary" />
+          <div className="flex items-center text-sm font-medium">
+            <MapPinIcon className="w-4 h-4 mr-2" />
             <span>{venue}</span>
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs text-muted-foreground">Desde</p>
-            <p className="text-xl font-bold text-primary">
-              ${price.toLocaleString('es-CL')}
-            </p>
-          </div>
-          <Button
+        {/* CTA Button */}
+        <div className="pt-4 mt-auto">
+          <button
             onClick={(e) => {
               e.stopPropagation()
               router.push(`/events/${id}`)
             }}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            className="w-full py-3 bg-white text-black font-bold rounded-full text-sm uppercase tracking-wide hover:bg-gray-200 transition-colors duration-200"
           >
-            Ver Detalles
-          </Button>
+            Get Tickets
+          </button>
         </div>
       </div>
-    </Card>
+    </div>
   )
 }

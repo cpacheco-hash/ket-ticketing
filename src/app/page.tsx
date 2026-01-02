@@ -1,61 +1,83 @@
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black">
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center justify-center min-h-[80vh] text-center">
-          <h1 className="text-6xl md:text-8xl font-bold text-primary mb-6">
+          {/* Logo / Title */}
+          <h1 className="text-8xl md:text-9xl font-black tracking-tighter uppercase mb-8">
             KET
           </h1>
-          <p className="text-xl md:text-2xl text-foreground mb-8 max-w-2xl">
-            Tu próximo evento te espera
-          </p>
-          <p className="text-lg text-muted-foreground mb-12 max-w-xl">
-            Descubre conciertos y eventos basados en tu música favorita.
-            Sin sorpresas en el precio, sin reventa, solo buena música.
+
+          <h2 className="text-4xl md:text-6xl font-black tracking-tight uppercase mb-6 leading-tight">
+            Your Next
+            <br />
+            <span
+              className="text-transparent"
+              style={{
+                WebkitTextStroke: '2px white',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Moment
+            </span>
+            {' '}Awaits
+          </h2>
+
+          <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl font-medium">
+            Discover concerts and events based on your favorite music.
+            No hidden fees, no resale, just good music.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-20">
             <Link href="/events">
-              <Button className="px-8 py-4 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full text-base font-semibold">
-                Explorar Eventos
-              </Button>
+              <button className="px-12 py-4 bg-white text-black text-lg font-bold rounded-full hover:bg-gray-200 transition-colors uppercase tracking-widest">
+                Explore Events
+              </button>
             </Link>
             <Link href="/auth/login">
-              <Button variant="outline" className="px-8 py-4 border-primary text-primary hover:bg-primary/10 rounded-full text-base font-semibold">
-                Iniciar Sesión
-              </Button>
+              <button className="px-12 py-4 bg-transparent text-white border-2 border-white text-lg font-bold rounded-full hover:bg-white hover:text-black transition-all uppercase tracking-widest">
+                Sign In
+              </button>
             </Link>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl">
-            <div className="p-6 rounded-lg border border-border bg-card">
-              <div className="text-3xl mb-3">🎵</div>
-              <h3 className="font-semibold text-foreground mb-2">Descubrimiento Personalizado</h3>
-              <p className="text-sm text-muted-foreground">
-                Conecta Spotify y descubre eventos de tus artistas favoritos
+          {/* Feature Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full">
+            <div className="p-8 rounded-2xl border-2 border-white/20 hover:border-white/40 transition-colors bg-black">
+              <div className="text-5xl mb-4">🎵</div>
+              <h3 className="text-xl font-bold text-white mb-3 uppercase tracking-wide">
+                Personalized
+              </h3>
+              <p className="text-gray-400 font-medium">
+                Connect Spotify and discover events from your favorite artists
               </p>
             </div>
-            <div className="p-6 rounded-lg border border-border bg-card">
-              <div className="text-3xl mb-3">💳</div>
-              <h3 className="font-semibold text-foreground mb-2">Pagos Transparentes</h3>
-              <p className="text-sm text-muted-foreground">
-                Sin cargos ocultos. Paga directo desde tu banco con Fintoc
+            <div className="p-8 rounded-2xl border-2 border-white/20 hover:border-white/40 transition-colors bg-black">
+              <div className="text-5xl mb-4">💳</div>
+              <h3 className="text-xl font-bold text-white mb-3 uppercase tracking-wide">
+                Transparent
+              </h3>
+              <p className="text-gray-400 font-medium">
+                No hidden fees. Pay directly from your bank with Fintoc
               </p>
             </div>
-            <div className="p-6 rounded-lg border border-border bg-card">
-              <div className="text-3xl mb-3">🔒</div>
-              <h3 className="font-semibold text-foreground mb-2">Anti-Fraude</h3>
-              <p className="text-sm text-muted-foreground">
-                QR dinámico y sistema de waitlist para evitar reventas
+            <div className="p-8 rounded-2xl border-2 border-white/20 hover:border-white/40 transition-colors bg-black">
+              <div className="text-5xl mb-4">🔒</div>
+              <h3 className="text-xl font-bold text-white mb-3 uppercase tracking-wide">
+                Secure
+              </h3>
+              <p className="text-gray-400 font-medium">
+                Dynamic QR codes and waitlist system to prevent scalping
               </p>
             </div>
           </div>
 
-          <div className="mt-12 text-muted-foreground text-sm">
-            <p>MVP en desarrollo - Wireframes implementados</p>
+          {/* Footer Note */}
+          <div className="mt-20 text-gray-500 text-sm uppercase tracking-widest">
+            <p>Fan-First Ticketing Platform</p>
           </div>
         </div>
       </div>
