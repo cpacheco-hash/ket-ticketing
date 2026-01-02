@@ -20,32 +20,37 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' }
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<any> {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Credenciales inválidas')
+          return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
-        })
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email }
+          })
 
-        if (!user || !user.password) {
-          throw new Error('Usuario no encontrado')
-        }
+          if (!user || !user.password) {
+            return null
+          }
 
-        // Compare password with hashed password
-        const isPasswordValid = await compare(credentials.password, user.password)
+          // Compare password with hashed password
+          const isPasswordValid = await compare(credentials.password, user.password)
 
-        if (!isPasswordValid) {
-          throw new Error('Contraseña incorrecta')
-        }
+          if (!isPasswordValid) {
+            return null
+          }
 
-        return {
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          avatar: user.avatar
+          return {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            avatar: user.avatar || undefined
+          }
+        } catch (error) {
+          console.error('Auth error:', error)
+          return null
         }
       }
     }),

@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '../../../auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { transferTicketSchema } from '@/lib/validations/ticket'
 import { z } from 'zod'
-import { randomBytes } from 'crypto'
 
 // POST /api/tickets/[id]/transfer - Transfer ticket to another user
 export async function POST(

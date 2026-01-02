@@ -46,7 +46,7 @@ export default function ConfirmationPage() {
           <div className="mt-8 p-4 rounded-lg bg-muted/50">
             <p className="text-sm text-muted-foreground">
               💡 <strong>Tip:</strong> Tus QR codes se activarán el día del evento.
-              Podrás verlos en la sección "Mis Entradas".
+              Podrás verlos en la sección &quot;Mis Entradas&quot;.
             </p>
           </div>
         </Card>
