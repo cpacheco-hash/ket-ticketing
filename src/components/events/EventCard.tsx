@@ -1,3 +1,6 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
 import { CalendarIcon, MapPinIcon } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -13,9 +16,11 @@ interface EventCardProps {
   price: number
 }
 
-export function EventCard({ title, artist, venue, date, image, price }: EventCardProps) {
+export function EventCard({ id, title, artist, venue, date, image, price }: EventCardProps) {
+  const router = useRouter()
+
   return (
-    <Card className="overflow-hidden border-border bg-card hover:border-primary/50 transition-colors">
+    <Card className="overflow-hidden border-border bg-card hover:border-primary/50 transition-colors cursor-pointer" onClick={() => router.push(`/events/${id}`)}>
       {/* Event Image */}
       <div className="relative h-48 w-full bg-muted">
         {image ? (
@@ -55,7 +60,13 @@ export function EventCard({ title, artist, venue, date, image, price }: EventCar
               ${price.toLocaleString('es-CL')}
             </p>
           </div>
-          <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button
+            onClick={(e) => {
+              e.stopPropagation()
+              router.push(`/events/${id}`)
+            }}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
             Ver Detalles
           </Button>
         </div>

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { AppLayout, Header } from '@/components/layout'
@@ -8,12 +9,43 @@ import { Button } from '@/components/ui/button'
 import { UserCircleIcon } from 'lucide-react'
 
 export default function ProfilePage() {
-  const { data: session } = useSession()
+  const { data: session, update } = useSession()
   const router = useRouter()
+  const [isEditing, setIsEditing] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    firstName: session?.user?.firstName || '',
+    lastName: session?.user?.lastName || '',
+    email: session?.user?.email || '',
+  })
 
   if (!session) {
     router.push('/auth/login')
     return null
+  }
+
+  const handleSave = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/user/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      if (res.ok) {
+        await update()
+        setIsEditing(false)
+        alert('Perfil actualizado exitosamente')
+      } else {
+        alert('Error al actualizar perfil')
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error)
+      alert('Error al actualizar perfil')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -41,9 +73,10 @@ export default function ProfilePage() {
               </label>
               <input
                 type="text"
-                value={session.user.firstName}
-                disabled
-                className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-foreground"
+                value={formData.firstName}
+                onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                disabled={!isEditing}
+                className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground disabled:bg-muted disabled:opacity-70"
               />
             </div>
 
@@ -53,9 +86,10 @@ export default function ProfilePage() {
               </label>
               <input
                 type="text"
-                value={session.user.lastName}
-                disabled
-                className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-foreground"
+                value={formData.lastName}
+                onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                disabled={!isEditing}
+                className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground disabled:bg-muted disabled:opacity-70"
               />
             </div>
 
@@ -65,16 +99,46 @@ export default function ProfilePage() {
               </label>
               <input
                 type="email"
-                value={session.user.email}
-                disabled
-                className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-foreground"
+                value={formData.email}
+                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                disabled={!isEditing}
+                className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground disabled:bg-muted disabled:opacity-70"
               />
             </div>
 
-            <div className="pt-4">
-              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                Guardar Cambios
-              </Button>
+            <div className="pt-4 flex gap-3">
+              {!isEditing ? (
+                <Button
+                  onClick={() => setIsEditing(true)}
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  Editar Perfil
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => {
+                      setIsEditing(false)
+                      setFormData({
+                        firstName: session.user.firstName,
+                        lastName: session.user.lastName,
+                        email: session.user.email,
+                      })
+                    }}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    onClick={handleSave}
+                    disabled={loading}
+                    className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    {loading ? 'Guardando...' : 'Guardar Cambios'}
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </Card>

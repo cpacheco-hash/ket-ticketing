@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CalendarIcon, MapPinIcon } from 'lucide-react'
@@ -13,7 +14,8 @@ interface TicketCardProps {
   qrCode: string
 }
 
-export function TicketCard({ eventTitle, eventDate, venue, qrCode }: TicketCardProps) {
+export function TicketCard({ id, eventTitle, eventDate, venue, qrCode }: TicketCardProps) {
+  const router = useRouter()
   return (
     <Card className="border-2 border-primary/30 bg-card p-6 hover:border-primary transition-colors">
       {/* Event Header */}
@@ -55,10 +57,14 @@ export function TicketCard({ eventTitle, eventDate, venue, qrCode }: TicketCardP
         <Button
           variant="outline"
           className="border-primary text-primary hover:bg-primary/10"
+          onClick={() => router.push(`/tickets/${id}`)}
         >
           Ver Ticket
         </Button>
-        <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+        <Button
+          className="bg-primary text-primary-foreground hover:bg-primary/90"
+          onClick={() => router.push(`/tickets/${id}/transfer`)}
+        >
           Vender
         </Button>
       </div>

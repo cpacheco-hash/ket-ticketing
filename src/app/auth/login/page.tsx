@@ -2,17 +2,48 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
 export default function LoginPage() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement authentication
-    console.log('Login attempt:', { email, password })
+    setLoading(true)
+    setError('')
+
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        setError('Credenciales inválidas')
+      } else {
+        router.push('/events')
+      }
+    } catch (err) {
+      setError('Error al iniciar sesión')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleGoogleSignIn = () => {
+    signIn('google', { callbackUrl: '/events' })
+  }
+
+  const handleSpotifySignIn = () => {
+    signIn('spotify', { callbackUrl: '/events' })
   }
 
   return (
@@ -56,11 +87,18 @@ export default function LoginPage() {
             />
           </div>
 
+          {error && (
+            <div className="text-sm text-red-500 text-center">
+              {error}
+            </div>
+          )}
+
           <Button
             type="submit"
-            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold"
+            disabled={loading}
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold disabled:opacity-50"
           >
-            Iniciar Sesión
+            {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           </Button>
         </form>
 
@@ -76,6 +114,8 @@ export default function LoginPage() {
           <Button
             type="button"
             variant="outline"
+            onClick={handleGoogleSignIn}
+            disabled={loading}
             className="w-full border-border hover:bg-secondary"
           >
             Continuar con Google
@@ -83,6 +123,8 @@ export default function LoginPage() {
           <Button
             type="button"
             variant="outline"
+            onClick={handleSpotifySignIn}
+            disabled={loading}
             className="w-full border-border hover:bg-secondary"
           >
             Continuar con Spotify

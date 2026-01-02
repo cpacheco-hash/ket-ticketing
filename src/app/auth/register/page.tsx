@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
 export default function RegisterPage() {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -14,6 +16,8 @@ export default function RegisterPage() {
     password: '',
     confirmPassword: ''
   })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -22,10 +26,44 @@ export default function RegisterPage() {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement registration
-    console.log('Registration attempt:', formData)
+    setLoading(true)
+    setError('')
+
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError('Las contraseñas no coinciden')
+      setLoading(false)
+      return
+    }
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || 'Error al crear cuenta')
+      } else {
+        // Redirect to login after successful registration
+        router.push('/auth/login?registered=true')
+      }
+    } catch (err) {
+      setError('Error al crear cuenta')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -137,11 +175,18 @@ export default function RegisterPage() {
             />
           </div>
 
+          {error && (
+            <div className="text-sm text-red-500 text-center">
+              {error}
+            </div>
+          )}
+
           <Button
             type="submit"
-            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold"
+            disabled={loading}
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold disabled:opacity-50"
           >
-            Crear Cuenta
+            {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
           </Button>
         </form>
 

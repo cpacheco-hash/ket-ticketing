@@ -1,11 +1,17 @@
 'use client'
 
 import { useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { AppLayout, Header } from '@/components/layout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
 export default function CreateEventPage() {
+  const { data: session } = useSession()
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [formData, setFormData] = useState({
     title: '',
     artist: '',
@@ -18,6 +24,11 @@ export default function CreateEventPage() {
     genres: ''
   })
 
+  if (!session) {
+    router.push('/auth/login?callbackUrl=/create')
+    return null
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
@@ -25,10 +36,52 @@ export default function CreateEventPage() {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Create event:', formData)
-    // TODO: Implement event creation
+    setLoading(true)
+    setError('')
+
+    try {
+      const response = await fetch('/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          date: new Date(formData.date).toISOString(),
+          doorsOpen: new Date(formData.doors).toISOString(),
+          price: parseInt(formData.price) * 100, // Convert to cents
+          totalTickets: parseInt(formData.totalTickets),
+          artist: {
+            name: formData.artist,
+            genres: formData.genres.split(',').map(g => g.trim()),
+          },
+          venue: {
+            name: formData.venue,
+          }
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create event')
+      }
+
+      const { event } = await response.json()
+
+      alert('Evento creado exitosamente')
+      router.push(`/events/${event.id}`)
+    } catch (err) {
+      console.error('Error creating event:', err)
+      setError('Error al crear el evento. Por favor intenta de nuevo.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCancel = () => {
+    if (confirm('¿Estás seguro de que quieres cancelar? Se perderán todos los cambios.')) {
+      router.push('/events')
+    }
   }
 
   return (
@@ -199,20 +252,29 @@ export default function CreateEventPage() {
               />
             </div>
 
+            {error && (
+              <div className="text-sm text-red-500 text-center">
+                {error}
+              </div>
+            )}
+
             {/* Actions */}
             <div className="flex gap-4 justify-end pt-4">
               <Button
                 type="button"
                 variant="outline"
+                onClick={handleCancel}
+                disabled={loading}
                 className="border-border hover:bg-secondary"
               >
                 Cancelar
               </Button>
               <Button
                 type="submit"
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                disabled={loading}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
               >
-                Crear Evento
+                {loading ? 'Creando...' : 'Crear Evento'}
               </Button>
             </div>
           </form>
