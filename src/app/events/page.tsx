@@ -50,7 +50,7 @@ export default function EventsPage() {
         {/* Hero Section */}
         <div className="mb-20">
           <h1 className="text-6xl md:text-8xl font-black tracking-tighter uppercase mb-6 leading-[0.9]">
-            Don't Miss
+            Don&apos;t Miss
             <br />
             <span
               className="text-transparent stroke-white stroke-2"
