@@ -112,40 +112,72 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
 
+    // Helper function to generate slug
+    const generateSlug = (text: string) => {
+      return text.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove accents
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '')
+    }
+
     // Create or find artist
     let artist
     if (body.artist?.name) {
-      artist = await prisma.artist.upsert({
-        where: { name: body.artist.name },
-        update: {},
-        create: {
-          name: body.artist.name,
-          bio: body.artist.bio || '',
-          genres: body.artist.genres || [],
-          spotifyUrl: body.artist.spotifyUrl || null,
-        }
+      const artistSlug = generateSlug(body.artist.name)
+
+      // Try to find existing artist by slug
+      artist = await prisma.artist.findUnique({
+        where: { slug: artistSlug }
       })
+
+      // If not found, create new artist
+      if (!artist) {
+        artist = await prisma.artist.create({
+          data: {
+            name: body.artist.name,
+            slug: artistSlug,
+            bio: body.artist.bio || '',
+            genres: body.artist.genres || [],
+            spotifyId: body.artist.spotifyId || null,
+          }
+        })
+      }
     }
 
     // Create or find venue
     let venue
     if (body.venue?.name) {
-      venue = await prisma.venue.upsert({
-        where: { name: body.venue.name },
-        update: {},
-        create: {
-          name: body.venue.name,
-          address: body.venue.address || '',
-          city: body.venue.city || 'Santiago',
-          capacity: body.venue.capacity || 1000,
-        }
+      const venueSlug = generateSlug(body.venue.name)
+
+      // Try to find existing venue by slug
+      venue = await prisma.venue.findUnique({
+        where: { slug: venueSlug }
       })
+
+      // If not found, create new venue
+      if (!venue) {
+        venue = await prisma.venue.create({
+          data: {
+            name: body.venue.name,
+            slug: venueSlug,
+            address: body.venue.address || '',
+            city: body.venue.city || 'Santiago',
+            capacity: body.venue.capacity || 1000,
+          }
+        })
+      }
+    }
+
+    // Validate artist and venue exist
+    if (!artist || !venue) {
+      return NextResponse.json(
+        { error: 'Artista y venue son requeridos' },
+        { status: 400 }
+      )
     }
 
     // Generate slug from title
-    const slug = body.title.toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '')
+    const slug = generateSlug(body.title)
 
     // Create event
     const event = await prisma.event.create({
@@ -153,8 +185,8 @@ export async function POST(request: NextRequest) {
         title: body.title,
         description: body.description || '',
         slug: slug,
-        artistId: artist?.id,
-        venueId: venue?.id,
+        artistId: artist.id,
+        venueId: venue.id,
         date: new Date(body.date),
         doors: new Date(body.doorsOpen || body.date),
         price: body.price,
@@ -163,7 +195,7 @@ export async function POST(request: NextRequest) {
         availableTickets: body.totalTickets,
         images: body.images || [],
         genres: body.artist?.genres || [],
-        status: 'ACTIVE'
+        status: 'ON_SALE'
       },
       include: {
         venue: true,
