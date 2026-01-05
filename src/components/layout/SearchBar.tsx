@@ -16,8 +16,8 @@ export function SearchBar({ className = '' }: SearchBarProps) {
       <input
         type="text"
         className="block w-full pl-11 pr-4 py-3 bg-black border-2 border-white rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all duration-200 font-medium"
-        placeholder="Search events, artists, venues..."
-        aria-label="Search events"
+        placeholder="Buscar eventos, artistas, lugares..."
+        aria-label="Buscar eventos"
       />
     </div>
   )

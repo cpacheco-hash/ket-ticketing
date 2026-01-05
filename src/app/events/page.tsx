@@ -22,7 +22,7 @@ interface Event {
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeFilter, setActiveFilter] = useState('All')
+  const [activeFilter, setActiveFilter] = useState('Todos')
 
   useEffect(() => {
     fetchEvents()
@@ -42,7 +42,7 @@ export default function EventsPage() {
     }
   }
 
-  const filters = ['All', 'Music', 'Arts', 'Comedy', 'Film']
+  const filters = ['Todos', 'Música', 'Arte', 'Comedia', 'Cine']
 
   return (
     <AppLayout>
@@ -50,7 +50,7 @@ export default function EventsPage() {
         {/* Hero Section */}
         <div className="mb-20">
           <h1 className="text-6xl md:text-8xl font-black tracking-tighter uppercase mb-6 leading-[0.9]">
-            Don&apos;t Miss
+            No Te Pierdas
             <br />
             <span
               className="text-transparent stroke-white stroke-2"
@@ -59,19 +59,19 @@ export default function EventsPage() {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              The Moment
+              El Momento
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-400 max-w-2xl font-medium">
-            Discover the best gigs, clubs, and festivals happening in your city.
-            No booking fees, ever.
+            Descubre los mejores conciertos, clubes y festivales en tu ciudad.
+            Sin comisiones, nunca.
           </p>
         </div>
 
         {/* Filters / Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-white/20 pb-6">
           <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-tight mb-4 md:mb-0">
-            Trending Now
+            En Tendencia
           </h2>
           <div className="flex space-x-4 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
             {filters.map((filter) => (
@@ -115,9 +115,9 @@ export default function EventsPage() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <h3 className="text-2xl font-bold text-white mb-4">No events yet</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">Aún no hay eventos</h3>
             <p className="text-gray-400 mb-8">
-              Check back soon or connect your Spotify for personalized recommendations
+              Vuelve pronto o conecta tu Spotify para recomendaciones personalizadas
             </p>
           </div>
         )}
@@ -126,10 +126,10 @@ export default function EventsPage() {
         {events.length > 0 && (
           <div className="mt-32 text-center border-t border-white/20 pt-20 pb-10">
             <h3 className="text-4xl md:text-5xl font-black uppercase mb-8">
-              Want to see more?
+              ¿Quieres ver más?
             </h3>
             <button className="px-12 py-4 bg-white text-black text-lg font-bold rounded-full hover:bg-gray-200 transition-colors uppercase tracking-widest">
-              View All Events
+              Ver Todos Los Eventos
             </button>
           </div>
         )}

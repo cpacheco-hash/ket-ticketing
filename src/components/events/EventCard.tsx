@@ -70,7 +70,7 @@ export function EventCard({ id, title, artist, venue, date, image, price }: Even
             }}
             className="w-full py-3 bg-white text-black font-bold rounded-full text-sm uppercase tracking-wide hover:bg-gray-200 transition-colors duration-200"
           >
-            Get Tickets
+            Obtener Tickets
           </button>
         </div>
       </div>
