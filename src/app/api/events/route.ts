@@ -112,26 +112,58 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
 
-    // Validate input
-    const validated = createEventSchema.parse(body)
+    // Create or find artist
+    let artist
+    if (body.artist?.name) {
+      artist = await prisma.artist.upsert({
+        where: { name: body.artist.name },
+        update: {},
+        create: {
+          name: body.artist.name,
+          bio: body.artist.bio || '',
+          genres: body.artist.genres || [],
+          spotifyUrl: body.artist.spotifyUrl || null,
+        }
+      })
+    }
+
+    // Create or find venue
+    let venue
+    if (body.venue?.name) {
+      venue = await prisma.venue.upsert({
+        where: { name: body.venue.name },
+        update: {},
+        create: {
+          name: body.venue.name,
+          address: body.venue.address || '',
+          city: body.venue.city || 'Santiago',
+          capacity: body.venue.capacity || 1000,
+        }
+      })
+    }
+
+    // Generate slug from title
+    const slug = body.title.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
 
     // Create event
     const event = await prisma.event.create({
       data: {
-        title: validated.title,
-        description: validated.description,
-        slug: validated.slug,
-        venueId: validated.venueId,
-        artistId: validated.artistId,
-        date: new Date(validated.date),
-        doors: new Date(validated.doors),
-        price: validated.price,
-        currency: validated.currency,
-        totalTickets: validated.totalTickets,
-        availableTickets: validated.availableTickets || validated.totalTickets,
-        images: validated.images,
-        genres: validated.genres,
-        status: validated.status
+        title: body.title,
+        description: body.description || '',
+        slug: slug,
+        artistId: artist?.id,
+        venueId: venue?.id,
+        date: new Date(body.date),
+        doors: new Date(body.doorsOpen || body.date),
+        price: body.price,
+        currency: body.currency || 'CLP',
+        totalTickets: body.totalTickets,
+        availableTickets: body.totalTickets,
+        images: body.images || [],
+        genres: body.artist?.genres || [],
+        status: 'ACTIVE'
       },
       include: {
         venue: true,
@@ -139,18 +171,11 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    return NextResponse.json(event, { status: 201 })
+    return NextResponse.json({ event }, { status: 201 })
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Invalid input', details: error.errors },
-        { status: 400 }
-      )
-    }
-
     console.error('Error creating event:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Error al crear evento', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

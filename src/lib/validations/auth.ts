@@ -9,16 +9,9 @@ export const registerSchema = z.object({
   firstName: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
   lastName: z.string().min(2, 'El apellido debe tener al menos 2 caracteres'),
   email: z.string().email('Email inválido'),
-  phone: z.string().regex(/^\+?56\s?9\s?\d{4}\s?\d{4}$/, 'Teléfono inválido (formato: +56 9 1234 5678)').optional(),
-  password: z.string()
-    .min(8, 'La contraseña debe tener al menos 8 caracteres')
-    .regex(/[A-Z]/, 'Debe contener al menos una mayúscula')
-    .regex(/[a-z]/, 'Debe contener al menos una minúscula')
-    .regex(/[0-9]/, 'Debe contener al menos un número'),
-  confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Las contraseñas no coinciden',
-  path: ['confirmPassword']
+  phone: z.string().min(1, 'Teléfono requerido').optional(),
+  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+  confirmPassword: z.string().optional()
 })
 
 export const updateProfileSchema = z.object({
