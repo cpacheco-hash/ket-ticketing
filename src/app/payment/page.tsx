@@ -1,6 +1,6 @@
 'use client'
 
-import { AppLayout, Header } from '@/components/layout'
+import { AppLayout, PageHeader } from '@/components/layout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CreditCardIcon, Banknote, PlusIcon, TrashIcon } from 'lucide-react'
@@ -28,15 +28,16 @@ const mockPaymentMethods = [
 export default function PaymentPage() {
   return (
     <AppLayout>
-      <Header
-        title="Medios de Pago"
-        action={{
-          label: 'Añadir Nuevo Método de Pago',
-          onClick: () => console.log('Add payment method')
-        }}
-      />
+      <PageHeader title="Medios de Pago" />
 
       <div className="p-6 max-w-3xl">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-foreground">Tus Métodos de Pago</h2>
+          <Button onClick={() => console.log('Add payment method')} className="flex items-center gap-2">
+            <PlusIcon className="h-4 w-4" />
+            Añadir Método
+          </Button>
+        </div>
         {/* Payment Methods List */}
         <div className="space-y-4 mb-6">
           {mockPaymentMethods.map((method) => {
