@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { AppLayout, Header } from '@/components/layout'
+import { AppLayout } from '@/components/layout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CalendarIcon, MapPinIcon, UsersIcon, ClockIcon } from 'lucide-react'

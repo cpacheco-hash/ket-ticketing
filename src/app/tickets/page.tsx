@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { AppLayout, Header } from '@/components/layout'
+import { AppLayout, PageHeader } from '@/components/layout'
 import { TicketCard } from '@/components/tickets/TicketCard'
 import { formatDateTime } from '@/lib/format'
 
@@ -62,13 +62,7 @@ export default function TicketsPage() {
 
   return (
     <AppLayout>
-      <Header
-        title="Mis Entradas"
-        action={{
-          label: 'Comprar Entradas',
-          onClick: () => router.push('/events')
-        }}
-      />
+      <PageHeader title="Mis Entradas" />
 
       <div className="p-6">
         {tickets.length > 0 ? (
