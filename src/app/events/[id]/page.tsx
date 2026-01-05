@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import { AppLayout } from '@/components/layout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CalendarIcon, MapPinIcon, UsersIcon, ClockIcon, Edit } from 'lucide-react'
+import { CalendarIcon, MapPinIcon, UsersIcon, ClockIcon, Edit, Trash2 } from 'lucide-react'
 import { formatPrice, formatEventDate } from '@/lib/format'
 import { useCartStore } from '@/store/cart'
 import Image from 'next/image'
@@ -40,6 +40,7 @@ export default function EventDetailPage() {
   const { addItem } = useCartStore()
   const [event, setEvent] = useState<Event | null>(null)
   const [loading, setLoading] = useState(true)
+  const [deleting, setDeleting] = useState(false)
   const [quantity, setQuantity] = useState(1)
 
   useEffect(() => {
@@ -73,6 +74,37 @@ export default function EventDetailPage() {
     })
 
     router.push('/checkout')
+  }
+
+  const handleDelete = async () => {
+    if (!event) return
+
+    const confirmed = confirm(
+      '¿Estás seguro de que quieres eliminar este evento?\n\n' +
+      'Esta acción no se puede deshacer. Si hay tickets vendidos, no se podrá eliminar.'
+    )
+
+    if (!confirmed) return
+
+    setDeleting(true)
+    try {
+      const response = await fetch(`/api/events/${event.id}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Error al eliminar el evento')
+      }
+
+      alert('Evento eliminado exitosamente')
+      router.push('/events')
+    } catch (err: any) {
+      console.error('Error deleting event:', err)
+      alert(err.message || 'Error al eliminar el evento')
+    } finally {
+      setDeleting(false)
+    }
   }
 
   if (loading) {
@@ -148,15 +180,27 @@ export default function EventDetailPage() {
                   ))}
                 </div>
                 {canEdit && (
-                  <Button
-                    onClick={() => router.push(`/events/${event.id}/edit`)}
-                    variant="outline"
-                    size="sm"
-                    className="border-primary text-primary hover:bg-primary/10"
-                  >
-                    <Edit className="h-4 w-4 mr-2" />
-                    Editar Evento
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => router.push(`/events/${event.id}/edit`)}
+                      variant="outline"
+                      size="sm"
+                      className="border-primary text-primary hover:bg-primary/10"
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Editar Evento
+                    </Button>
+                    <Button
+                      onClick={handleDelete}
+                      disabled={deleting}
+                      variant="outline"
+                      size="sm"
+                      className="border-red-500 text-red-500 hover:bg-red-500/10"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      {deleting ? 'Eliminando...' : 'Eliminar Evento'}
+                    </Button>
+                  </div>
                 )}
               </div>
 
