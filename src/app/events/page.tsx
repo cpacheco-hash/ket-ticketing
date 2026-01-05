@@ -59,12 +59,11 @@ export default function EventsPage() {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              El Momento
+              Tu Evento
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-400 max-w-2xl font-medium">
-            Descubre los mejores conciertos, clubes y festivales en tu ciudad.
-            Sin comisiones, nunca.
+            Descubre los mejores conciertos, clubes y festivales en tu ciudad con KET.
           </p>
         </div>
 

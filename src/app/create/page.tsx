@@ -29,6 +29,25 @@ export default function CreateEventPage() {
     return null
   }
 
+  // Check if user is admin or organizer
+  if (session.user.role !== 'ADMIN' && session.user.role !== 'ORGANIZER') {
+    return (
+      <AppLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <Card className="border-border bg-card p-8 max-w-md">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Acceso Denegado</h2>
+            <p className="text-muted-foreground mb-6">
+              Solo los administradores y organizadores pueden crear eventos.
+            </p>
+            <Button onClick={() => router.push('/events')} className="w-full">
+              Volver a Eventos
+            </Button>
+          </Card>
+        </div>
+      </AppLayout>
+    )
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,

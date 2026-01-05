@@ -46,7 +46,8 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            avatar: user.avatar || undefined
+            avatar: user.avatar || undefined,
+            role: user.role
           }
         } catch (error) {
           console.error('Auth error:', error)
@@ -78,6 +79,7 @@ export const authOptions: NextAuthOptions = {
         token.firstName = (user as any).firstName
         token.lastName = (user as any).lastName
         token.avatar = (user as any).avatar
+        token.role = (user as any).role || 'USER'
       }
 
       // Store OAuth access tokens
@@ -95,6 +97,7 @@ export const authOptions: NextAuthOptions = {
         session.user.firstName = token.firstName as string
         session.user.lastName = token.lastName as string
         session.user.avatar = token.avatar as string | undefined
+        session.user.role = token.role as string || 'USER'
       }
 
       return session

@@ -20,14 +20,13 @@ export default function HomePage() {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              Momento
+              Evento
             </span>
             {' '}Te Espera
           </h2>
 
           <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl font-medium">
-            Descubre conciertos y eventos basados en tu música favorita.
-            Sin comisiones ocultas, sin reventa, solo buena música.
+            Olvídate de los PDFs y fotos con KET, todo lo relacionado con tu evento en un solo lugar.
           </p>
 
           {/* CTA Buttons */}
@@ -61,7 +60,7 @@ export default function HomePage() {
                 Transparente
               </h3>
               <p className="text-gray-400 font-medium">
-                Sin comisiones ocultas. Paga directo desde tu banco con Fintoc
+                Paga directo desde tu banco con Fintoc. Todo en KET.
               </p>
             </div>
             <div className="p-8 rounded-2xl border-2 border-white/20 hover:border-white/40 transition-colors bg-black">
