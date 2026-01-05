@@ -58,6 +58,14 @@ export async function PATCH(
       )
     }
 
+    // Check if user is admin or organizer
+    if (session.user.role !== 'ADMIN' && session.user.role !== 'ORGANIZER') {
+      return NextResponse.json(
+        { error: 'Solo administradores y organizadores pueden editar eventos' },
+        { status: 403 }
+      )
+    }
+
     const body = await request.json()
 
     // Validate input
@@ -106,6 +114,14 @@ export async function DELETE(
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
+      )
+    }
+
+    // Check if user is admin or organizer
+    if (session.user.role !== 'ADMIN' && session.user.role !== 'ORGANIZER') {
+      return NextResponse.json(
+        { error: 'Solo administradores y organizadores pueden eliminar eventos' },
+        { status: 403 }
       )
     }
 

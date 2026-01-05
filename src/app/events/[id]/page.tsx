@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { AppLayout } from '@/components/layout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CalendarIcon, MapPinIcon, UsersIcon, ClockIcon } from 'lucide-react'
+import { CalendarIcon, MapPinIcon, UsersIcon, ClockIcon, Edit } from 'lucide-react'
 import { formatPrice, formatEventDate } from '@/lib/format'
 import { useCartStore } from '@/store/cart'
 import Image from 'next/image'
@@ -35,6 +36,7 @@ interface Event {
 export default function EventDetailPage() {
   const params = useParams()
   const router = useRouter()
+  const { data: session } = useSession()
   const { addItem } = useCartStore()
   const [event, setEvent] = useState<Event | null>(null)
   const [loading, setLoading] = useState(true)
@@ -105,6 +107,7 @@ export default function EventDetailPage() {
   const ticketsLeft = event.availableTickets
   const isSoldOut = ticketsLeft === 0
   const isLowStock = ticketsLeft < 50 && ticketsLeft > 0
+  const canEdit = session?.user && (session.user.role === 'ADMIN' || session.user.role === 'ORGANIZER')
 
   return (
     <AppLayout>
@@ -133,15 +136,28 @@ export default function EventDetailPage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Title & Info */}
             <div>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {event.genres.map((genre) => (
-                  <span
-                    key={genre}
-                    className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
+              <div className="flex flex-wrap gap-2 mb-4 items-center justify-between">
+                <div className="flex flex-wrap gap-2">
+                  {event.genres.map((genre) => (
+                    <span
+                      key={genre}
+                      className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
+                    >
+                      {genre}
+                    </span>
+                  ))}
+                </div>
+                {canEdit && (
+                  <Button
+                    onClick={() => router.push(`/events/${event.id}/edit`)}
+                    variant="outline"
+                    size="sm"
+                    className="border-primary text-primary hover:bg-primary/10"
                   >
-                    {genre}
-                  </span>
-                ))}
+                    <Edit className="h-4 w-4 mr-2" />
+                    Editar Evento
+                  </Button>
+                )}
               </div>
 
               <h1 className="text-4xl font-bold text-foreground mb-4">

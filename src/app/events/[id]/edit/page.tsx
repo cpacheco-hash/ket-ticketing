@@ -1,19 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { AppLayout, PageHeader } from '@/components/layout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Trash2, Plus } from 'lucide-react'
 import Image from 'next/image'
 
-export default function CreateEventPage() {
+export default function EditEventPage() {
   const { data: session } = useSession()
   const router = useRouter()
+  const params = useParams()
   const [loading, setLoading] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(false)
+  const [fetching, setFetching] = useState(true)
   const [error, setError] = useState('')
   const [formData, setFormData] = useState({
     title: '',
@@ -28,8 +30,44 @@ export default function CreateEventPage() {
     images: [] as string[]
   })
 
+  useEffect(() => {
+    if (session && params.id) {
+      fetchEvent()
+    }
+  }, [session, params.id])
+
+  const fetchEvent = async () => {
+    try {
+      const res = await fetch(`/api/events/${params.id}`)
+      if (res.ok) {
+        const event = await res.json()
+
+        // Pre-fill form with event data
+        setFormData({
+          title: event.title || '',
+          artist: event.artist?.name || '',
+          venue: event.venue?.name || '',
+          date: event.date ? new Date(event.date).toISOString().slice(0, 16) : '',
+          doors: event.doors ? new Date(event.doors).toISOString().slice(0, 16) : '',
+          price: event.price ? (event.price / 100).toString() : '',
+          totalTickets: event.totalTickets?.toString() || '',
+          description: event.description || '',
+          genres: event.genres?.join(', ') || '',
+          images: event.images || []
+        })
+      } else {
+        setError('No se pudo cargar el evento')
+      }
+    } catch (err) {
+      console.error('Error fetching event:', err)
+      setError('Error al cargar el evento')
+    } finally {
+      setFetching(false)
+    }
+  }
+
   if (!session) {
-    router.push('/auth/login?callbackUrl=/create')
+    router.push('/auth/login?callbackUrl=/events')
     return null
   }
 
@@ -41,7 +79,7 @@ export default function CreateEventPage() {
           <Card className="border-border bg-card p-8 max-w-md">
             <h2 className="text-2xl font-bold text-foreground mb-4">Acceso Denegado</h2>
             <p className="text-muted-foreground mb-6">
-              Solo los administradores y organizadores pueden crear eventos.
+              Solo los administradores y organizadores pueden editar eventos.
             </p>
             <Button onClick={() => router.push('/events')} className="w-full">
               Volver a Eventos
@@ -107,38 +145,31 @@ export default function CreateEventPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/events', {
-        method: 'POST',
+      const response = await fetch(`/api/events/${params.id}`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: formData.title,
           description: formData.description,
           date: new Date(formData.date).toISOString(),
-          doorsOpen: new Date(formData.doors).toISOString(),
-          price: parseInt(formData.price) * 100, // Convert to cents
+          doors: new Date(formData.doors).toISOString(),
+          price: parseInt(formData.price) * 100,
           totalTickets: parseInt(formData.totalTickets),
+          genres: formData.genres.split(',').map(g => g.trim()),
           images: formData.images.filter(img => img.trim() !== ''),
-          artist: {
-            name: formData.artist,
-            genres: formData.genres.split(',').map(g => g.trim()),
-          },
-          venue: {
-            name: formData.venue,
-          }
         })
       })
 
       if (!response.ok) {
-        throw new Error('Failed to create event')
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to update event')
       }
 
-      const { event } = await response.json()
-
-      alert('Evento creado exitosamente')
-      router.push(`/events/${event.id}`)
-    } catch (err) {
-      console.error('Error creating event:', err)
-      setError('Error al crear el evento. Por favor intenta de nuevo.')
+      alert('Evento actualizado exitosamente')
+      router.push(`/events/${params.id}`)
+    } catch (err: any) {
+      console.error('Error updating event:', err)
+      setError(err.message || 'Error al actualizar el evento. Por favor intenta de nuevo.')
     } finally {
       setLoading(false)
     }
@@ -146,13 +177,26 @@ export default function CreateEventPage() {
 
   const handleCancel = () => {
     if (confirm('¿Estás seguro de que quieres cancelar? Se perderán todos los cambios.')) {
-      router.push('/events')
+      router.push(`/events/${params.id}`)
     }
+  }
+
+  if (fetching) {
+    return (
+      <AppLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4" />
+            <p className="text-gray-400">Cargando evento...</p>
+          </div>
+        </div>
+      </AppLayout>
+    )
   }
 
   return (
     <AppLayout>
-      <PageHeader title="Nuevo Concierto" />
+      <PageHeader title="Editar Evento" />
 
       <div className="p-6 max-w-4xl">
         <Card className="border-border bg-card p-6">
@@ -187,10 +231,11 @@ export default function CreateEventPage() {
                     type="text"
                     value={formData.artist}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-muted-foreground opacity-70 cursor-not-allowed"
                     placeholder="Ej: The Weeknd"
-                    required
+                    disabled
                   />
+                  <p className="text-xs text-muted-foreground mt-1">El artista no puede ser modificado</p>
                 </div>
 
                 <div>
@@ -203,10 +248,11 @@ export default function CreateEventPage() {
                     type="text"
                     value={formData.venue}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-muted-foreground opacity-70 cursor-not-allowed"
                     placeholder="Ej: Movistar Arena"
-                    required
+                    disabled
                   />
+                  <p className="text-xs text-muted-foreground mt-1">El lugar no puede ser modificado</p>
                 </div>
 
                 <div>
@@ -352,19 +398,18 @@ export default function CreateEventPage() {
                 ) : (
                   <div className="text-center p-8 border-2 border-dashed border-border rounded-lg">
                     <p className="text-muted-foreground mb-2">No hay imágenes agregadas</p>
-                    <p className="text-xs text-muted-foreground">Agrega al menos una imagen para tu evento</p>
                   </div>
                 )}
                 <div className="relative">
                   <input
                     type="file"
-                    id="image-upload"
+                    id="image-upload-edit"
                     accept="image/*"
                     onChange={handleAddImage}
                     disabled={uploadingImage}
                     className="hidden"
                   />
-                  <label htmlFor="image-upload">
+                  <label htmlFor="image-upload-edit">
                     <Button
                       type="button"
                       variant="outline"
@@ -407,21 +452,10 @@ export default function CreateEventPage() {
                 disabled={loading}
                 className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
               >
-                {loading ? 'Creando...' : 'Crear Evento'}
+                {loading ? 'Guardando...' : 'Guardar Cambios'}
               </Button>
             </div>
           </form>
-        </Card>
-
-        {/* Info Card */}
-        <Card className="mt-6 border-border bg-card/30 p-4">
-          <h4 className="mb-2 font-semibold text-foreground">Información para Productores</h4>
-          <ul className="space-y-1 text-sm text-muted-foreground">
-            <li>• Los eventos creados estarán sujetos a revisión antes de publicarse</li>
-            <li>• Comisión por ticket: 5% + CLP $500 (transparente, sin costos ocultos)</li>
-            <li>• Pagos procesados con Fintoc para mayor seguridad</li>
-            <li>• Acceso al panel de analytics en tiempo real</li>
-          </ul>
         </Card>
       </div>
     </AppLayout>

@@ -8,13 +8,13 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/store/cart'
 import { formatPrice, formatEventDate } from '@/lib/format'
-import { CreditCardIcon, Banknote } from 'lucide-react'
+import { CreditCardIcon, Banknote, Trash2, Plus, Minus } from 'lucide-react'
 import { PLATFORM_FEE_PERCENTAGE, PLATFORM_FEE_FIXED } from '@/lib/constants'
 
 export default function CheckoutPage() {
   const router = useRouter()
   const { data: session } = useSession()
-  const { items, clearCart, getTotalPrice } = useCartStore()
+  const { items, clearCart, getTotalPrice, removeItem, updateQuantity } = useCartStore()
   const [paymentMethod, setPaymentMethod] = useState<'FINTOC' | 'CARD' | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -103,24 +103,58 @@ export default function CheckoutPage() {
                 {items.map((item) => (
                   <div
                     key={item.eventId}
-                    className="flex justify-between items-start p-4 rounded-lg bg-muted/50"
+                    className="p-4 rounded-lg bg-muted/50 border border-border"
                   >
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-foreground">
-                        {item.eventTitle}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {formatEventDate(item.eventDate)}
-                      </p>
-                      <p className="text-sm text-muted-foreground">{item.venue}</p>
-                      <p className="text-sm text-foreground mt-2">
-                        {item.quantity} x {formatPrice(item.unitPrice / 100)}
-                      </p>
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-foreground">
+                          {item.eventTitle}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {formatEventDate(item.eventDate)}
+                        </p>
+                        <p className="text-sm text-muted-foreground">{item.venue}</p>
+                      </div>
+                      <button
+                        onClick={() => removeItem(item.eventId)}
+                        className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                        title="Eliminar del carrito"
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </button>
                     </div>
-                    <div className="text-right">
-                      <p className="font-bold text-foreground">
-                        {formatPrice((item.unitPrice * item.quantity) / 100)}
-                      </p>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm text-muted-foreground">Cantidad:</span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => updateQuantity(item.eventId, item.quantity - 1)}
+                            disabled={item.quantity <= 1}
+                            className="p-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <span className="text-lg font-bold text-foreground w-8 text-center">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(item.eventId, item.quantity + 1)}
+                            disabled={item.quantity >= 10}
+                            className="p-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          x {formatPrice(item.unitPrice / 100)}
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-foreground text-lg">
+                          {formatPrice((item.unitPrice * item.quantity) / 100)}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))}

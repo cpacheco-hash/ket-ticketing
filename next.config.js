@@ -10,6 +10,18 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'is1-ssl.mzstatic.com', // Apple Music images
       },
+      {
+        protocol: 'https',
+        hostname: 'i.imgur.com', // Imgur images
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com', // Cloudinary images
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com', // Unsplash images
+      },
     ],
   },
   experimental: {

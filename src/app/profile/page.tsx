@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { useState, useEffect } from 'react'
+import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { AppLayout, PageHeader } from '@/components/layout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { UserCircleIcon } from 'lucide-react'
+import { UserCircleIcon, LogOut } from 'lucide-react'
 
 export default function ProfilePage() {
   const { data: session, update } = useSession()
@@ -14,10 +14,20 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
-    firstName: session?.user?.firstName || '',
-    lastName: session?.user?.lastName || '',
-    email: session?.user?.email || '',
+    firstName: '',
+    lastName: '',
+    phone: '',
   })
+
+  useEffect(() => {
+    if (session?.user) {
+      setFormData({
+        firstName: session.user.firstName || '',
+        lastName: session.user.lastName || '',
+        phone: '', // TODO: Agregar phone al user session
+      })
+    }
+  }, [session])
 
   if (!session) {
     router.push('/auth/login')
@@ -99,9 +109,23 @@ export default function ProfilePage() {
               </label>
               <input
                 type="email"
-                value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                value={session.user.email}
+                disabled
+                className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-muted-foreground opacity-70 cursor-not-allowed"
+              />
+              <p className="text-xs text-muted-foreground mt-1">El email no puede ser modificado</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                Teléfono
+              </label>
+              <input
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 disabled={!isEditing}
+                placeholder="+56 9 1234 5678"
                 className="w-full rounded-lg border border-border bg-input px-4 py-3 text-foreground disabled:bg-muted disabled:opacity-70"
               />
             </div>
@@ -122,7 +146,7 @@ export default function ProfilePage() {
                       setFormData({
                         firstName: session.user.firstName,
                         lastName: session.user.lastName,
-                        email: session.user.email,
+                        phone: '', // TODO: Load from session
                       })
                     }}
                     variant="outline"
@@ -153,6 +177,18 @@ export default function ProfilePage() {
               Conectar Apple Music
             </Button>
           </div>
+        </Card>
+
+        <Card className="border-border bg-card p-6 mt-6">
+          <h3 className="font-semibold text-foreground mb-4">Sesión</h3>
+          <Button
+            onClick={() => signOut({ callbackUrl: '/' })}
+            variant="outline"
+            className="w-full border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            Cerrar Sesión
+          </Button>
         </Card>
       </div>
     </AppLayout>

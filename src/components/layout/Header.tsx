@@ -1,12 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { SearchBar } from './SearchBar'
 import { Menu, User } from 'lucide-react'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 
 export function Header() {
   const { data: session } = useSession()
+  const router = useRouter()
 
   return (
     <header className="sticky top-0 z-50 w-full bg-black/90 backdrop-blur-sm border-b border-white/10">
@@ -48,9 +50,10 @@ export function Header() {
             <div className="flex items-center space-x-4">
               {session ? (
                 <button
-                  onClick={() => signOut({ callbackUrl: '/' })}
+                  onClick={() => router.push('/profile')}
                   className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
-                  aria-label="Sign out"
+                  aria-label="Perfil de usuario"
+                  title="Mi Perfil"
                 >
                   <User className="w-6 h-6" />
                 </button>
