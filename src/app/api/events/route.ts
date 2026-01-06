@@ -120,13 +120,19 @@ export async function POST(request: NextRequest) {
         .replace(/(^-|-$)/g, '')
     }
 
-    // Create or find artist
-    let artist
-    if (body.artist?.name) {
+    let artistId: string
+    let venueId: string
+
+    // Handle artistId (from multi-step form) or artist object (from simple form)
+    if (body.artistId) {
+      // Multi-step form: use existing artist ID
+      artistId = body.artistId
+    } else if (body.artist?.name) {
+      // Simple form: create or find artist
       const artistSlug = generateSlug(body.artist.name)
 
       // Try to find existing artist by slug
-      artist = await prisma.artist.findUnique({
+      let artist = await prisma.artist.findUnique({
         where: { slug: artistSlug }
       })
 
@@ -142,15 +148,25 @@ export async function POST(request: NextRequest) {
           }
         })
       }
+
+      artistId = artist.id
+    } else {
+      return NextResponse.json(
+        { error: 'artistId o artist.name son requeridos' },
+        { status: 400 }
+      )
     }
 
-    // Create or find venue
-    let venue
-    if (body.venue?.name) {
+    // Handle venueId (from multi-step form) or venue object (from simple form)
+    if (body.venueId) {
+      // Multi-step form: use existing venue ID
+      venueId = body.venueId
+    } else if (body.venue?.name) {
+      // Simple form: create or find venue
       const venueSlug = generateSlug(body.venue.name)
 
       // Try to find existing venue by slug
-      venue = await prisma.venue.findUnique({
+      let venue = await prisma.venue.findUnique({
         where: { slug: venueSlug }
       })
 
@@ -166,18 +182,23 @@ export async function POST(request: NextRequest) {
           }
         })
       }
-    }
 
-    // Validate artist and venue exist
-    if (!artist || !venue) {
+      venueId = venue.id
+    } else {
       return NextResponse.json(
-        { error: 'Artista y venue son requeridos' },
+        { error: 'venueId o venue.name son requeridos' },
         { status: 400 }
       )
     }
 
     // Generate slug from title
-    const slug = generateSlug(body.title)
+    let slug = generateSlug(body.title)
+
+    // Check if slug already exists and make it unique if needed
+    const existingEvent = await prisma.event.findUnique({ where: { slug } })
+    if (existingEvent) {
+      slug = `${slug}-${Date.now()}`
+    }
 
     // Create event
     const event = await prisma.event.create({
@@ -185,17 +206,17 @@ export async function POST(request: NextRequest) {
         title: body.title,
         description: body.description || '',
         slug: slug,
-        artistId: artist.id,
-        venueId: venue.id,
+        artistId: artistId,
+        venueId: venueId,
         date: new Date(body.date),
-        doors: new Date(body.doorsOpen || body.date),
+        doors: new Date(body.doors || body.doorsOpen || body.date),
         price: body.price,
         currency: body.currency || 'CLP',
         totalTickets: body.totalTickets,
         availableTickets: body.totalTickets,
         images: body.images || [],
-        genres: body.artist?.genres || [],
-        status: 'ON_SALE'
+        genres: body.genres || [],
+        status: body.status || 'ON_SALE'
       },
       include: {
         venue: true,
@@ -203,7 +224,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({ event }, { status: 201 })
+    return NextResponse.json(event, { status: 201 })
   } catch (error) {
     console.error('Error creating event:', error)
     return NextResponse.json(

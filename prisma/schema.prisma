@@ -136,10 +136,12 @@ model Event {
   status      EventStatus @default(UPCOMING)
 
   // Relations
-  orders      Order[]
-  tickets     Ticket[]
-  waitlists   Waitlist[]
-  followers   Follow[]
+  orders        Order[]
+  tickets       Ticket[]
+  waitlists     Waitlist[]
+  followers     Follow[]
+  discountCodes DiscountCode[]
+  faqs          FAQ[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -243,6 +245,11 @@ model Order {
   // Payment
   paymentMethod PaymentMethod
   paymentStatus PaymentStatus @default(PENDING)
+
+  // Discount
+  discountCodeId String?
+  discountCode   DiscountCode? @relation(fields: [discountCodeId], references: [id])
+  discountAmount Int           @default(0) // Amount saved in cents
 
   // Relations
   payment Payment?
@@ -437,4 +444,74 @@ enum TransactionType {
   PURCHASE
   REFUND
   CREDIT
+}
+
+// ============================================================================
+// DISCOUNT CODES
+// ============================================================================
+
+model DiscountCode {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  eventId     String? // null = applies to all events
+
+  type        DiscountType
+  value       Int // Percentage (0-100) or fixed amount in cents
+
+  maxUses     Int? // null = unlimited
+  usedCount   Int      @default(0)
+
+  validFrom   DateTime
+  validUntil  DateTime
+
+  minPurchase Int? // Minimum order amount in cents
+
+  active      Boolean  @default(true)
+
+  event       Event?   @relation(fields: [eventId], references: [id])
+  orders      Order[]
+
+  createdAt   DateTime @default(now())
+
+  @@index([code])
+  @@index([eventId])
+  @@map("discount_codes")
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
+// ============================================================================
+// FAQ
+// ============================================================================
+
+model FAQ {
+  id          String      @id @default(cuid())
+  question    String
+  answer      String
+  category    FAQCategory
+  order       Int         @default(0)
+  eventId     String? // null = global FAQ
+
+  event       Event?      @relation(fields: [eventId], references: [id])
+
+  published   Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([category])
+  @@index([eventId])
+  @@index([published])
+  @@map("faqs")
+}
+
+enum FAQCategory {
+  TICKETS      // Compra de entradas
+  PAYMENT      // Pagos y reembolsos
+  ACCESS       // Acceso al evento
+  CHANGES      // Cambios y cancelaciones
+  TRANSFERS    // Transferencia de entradas
+  GENERAL      // Preguntas generales
 }
