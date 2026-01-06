@@ -114,14 +114,16 @@ async function getRecommendedEvents(userId?: string) {
       where: { id: userId },
       select: {
         following: {
-          where: { followType: 'ARTIST' },
+          where: {
+            artistId: { not: null }
+          },
           select: { artistId: true },
         },
       },
     })
 
     const followedArtistIds = user?.following
-      .map(f => f.artistId)
+      .map((f: { artistId: string | null }) => f.artistId)
       .filter((id): id is string => id !== null) || []
 
     // If user has followed artists, prioritize their events

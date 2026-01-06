@@ -136,7 +136,7 @@ export function ShareWidget({ event }: ShareWidgetProps) {
       </div>
 
       {/* Native Share (Mobile) */}
-      {typeof navigator !== 'undefined' && navigator.share && (
+      {typeof navigator !== 'undefined' && typeof navigator.share !== 'undefined' && (
         <Button
           onClick={shareNative}
           variant="outline"

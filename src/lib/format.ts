@@ -13,6 +13,13 @@ export function formatPrice(amount: number): string {
 }
 
 /**
+ * Format currency (alias for formatPrice)
+ */
+export function formatCurrency(amount: number): string {
+  return formatPrice(amount)
+}
+
+/**
  * Format date to readable string
  */
 export function formatDate(date: Date | string, formatStr: string = 'PPP'): string {

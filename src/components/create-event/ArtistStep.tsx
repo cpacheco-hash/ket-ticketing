@@ -91,7 +91,7 @@ export function ArtistStep({ data, onUpdate, onNext, onBack }: ArtistStepProps) 
               type="text"
               placeholder="Buscar artista por nombre..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
               className="pl-10 bg-gray-900 border-gray-700 text-white placeholder:text-gray-500"
             />
           </div>
@@ -203,7 +203,7 @@ export function ArtistStep({ data, onUpdate, onNext, onBack }: ArtistStepProps) 
         )}
 
         {errors.artistId && (
-          <p className="text-sm text-red-500">{errors.artistId.message}</p>
+          <p className="text-sm text-red-500">{errors.artistId.message as string}</p>
         )}
       </div>
 

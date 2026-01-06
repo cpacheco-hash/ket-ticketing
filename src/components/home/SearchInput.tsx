@@ -146,10 +146,15 @@ export function SearchInput({
     } else if (e.key === 'Enter' && selectedIndex >= 0) {
       e.preventDefault()
       // Navigate to selected item
-      const allItems = [
-        ...results.events.map((e) => ({ type: 'event', id: e.id })),
-        ...results.artists.map((a) => ({ type: 'artist', slug: a.slug })),
-        ...results.venues.map((v) => ({ type: 'venue', slug: v.slug })),
+      type SearchItem =
+        | { type: 'event'; id: string }
+        | { type: 'artist'; slug: string }
+        | { type: 'venue'; slug: string }
+
+      const allItems: SearchItem[] = [
+        ...results.events.map((e) => ({ type: 'event' as const, id: e.id })),
+        ...results.artists.map((a) => ({ type: 'artist' as const, slug: a.slug })),
+        ...results.venues.map((v) => ({ type: 'venue' as const, slug: v.slug })),
       ]
 
       const selected = allItems[selectedIndex]
