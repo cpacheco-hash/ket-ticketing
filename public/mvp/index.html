@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KET - Tu Proximo Evento Te Espera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#000;--white:#fff;--gray-100:rgba(255,255,255,.03);--gray-200:rgba(255,255,255,.06);--gray-300:rgba(255,255,255,.1);--gray-400:rgba(255,255,255,.2);--gray-500:#666;--gray-600:#999;--green:#1DB954;--radius:9999px;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--transition:all .25s cubic-bezier(.4,0,.2,1)}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--white);color:var(--black)}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
+input,textarea,select{font-family:inherit;color:var(--white);background:transparent}
+img{max-width:100%;display:block}
+.container{max-width:1280px;margin:0 auto;padding:0 20px}
+.flex{display:flex;align-items:center}.flex-between{justify-content:space-between}.gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}.gap-24{gap:24px}
+.font-display{font-family:var(--font-display)}
+.text-xs{font-size:12px}.text-sm{font-size:14px}.text-lg{font-size:18px}.text-xl{font-size:20px}.text-2xl{font-size:24px}.text-3xl{font-size:32px}.text-4xl{font-size:40px}.text-5xl{font-size:48px}.text-6xl{font-size:56px}.text-7xl{font-size:72px}
+.font-bold{font-weight:700}.font-black{font-weight:800}.uppercase{text-transform:uppercase}.tracking-tight{letter-spacing:-.03em}.tracking-wide{letter-spacing:.05em}
+.text-gray{color:var(--gray-500)}.text-gray-light{color:var(--gray-600)}.text-center{text-align:center}.leading-tight{line-height:1.1}
+
+.header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--gray-300);padding:0 20px;height:72px;display:flex;align-items:center}
+.header-inner{max-width:1280px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--font-display);font-size:32px;font-weight:800;letter-spacing:-.04em;cursor:pointer;transition:opacity .2s}
+.logo:hover{opacity:.8}
+.header-search{flex:1;max-width:440px;margin:0 32px;position:relative}
+.header-search input{width:100%;height:44px;border:1.5px solid var(--gray-400);border-radius:var(--radius);padding:0 44px 0 40px;font-size:14px;transition:var(--transition)}
+.header-search input:focus{outline:none;border-color:var(--white);box-shadow:0 0 0 2px rgba(255,255,255,.1)}
+.header-search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.5}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-link{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.7;transition:opacity .2s}
+.nav-link:hover{opacity:1}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 28px;border-radius:var(--radius);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:var(--transition);white-space:nowrap}
+.btn-primary{background:var(--white);color:var(--black)}.btn-primary:hover{background:#e0e0e0}
+.btn-outline{border:1.5px solid var(--gray-400);background:transparent}.btn-outline:hover{border-color:var(--white);background:rgba(255,255,255,.05)}
+.btn-outline.active{background:var(--white);color:var(--black);border-color:var(--white)}
+.btn-sm{padding:8px 18px;font-size:12px}.btn-lg{padding:16px 40px;font-size:16px}
+.btn-green{background:var(--green);color:var(--white)}.btn-green:hover{background:#1ed760}
+.btn-ghost{background:rgba(255,255,255,.05);border:1px solid var(--gray-300)}.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+.card{background:var(--gray-100);border:1px solid var(--gray-300);border-radius:16px;padding:24px;transition:var(--transition)}.card:hover{border-color:var(--gray-400)}
+.input{width:100%;height:48px;border:1.5px solid var(--gray-400);border-radius:12px;padding:0 16px;font-size:15px;background:rgba(255,255,255,.03);transition:var(--transition)}.input:focus{outline:none;border-color:var(--white);background:rgba(255,255,255,.06)}
+.input-lg{height:64px;font-size:20px;border-radius:var(--radius);padding:0 24px 0 52px}
+.textarea{min-height:100px;padding:14px 16px;resize:vertical;border:1.5px solid var(--gray-400);border-radius:12px;font-size:15px;background:rgba(255,255,255,.03);width:100%}.textarea:focus{outline:none;border-color:var(--white)}
+.select{height:48px;border:1.5px solid var(--gray-400);border-radius:12px;padding:0 16px;font-size:15px;background:rgba(255,255,255,.03);width:100%;appearance:none}
+.label{display:block;font-size:13px;font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;color:var(--gray-600)}
+
+.chip{display:inline-flex;align-items:center;padding:8px 18px;border-radius:var(--radius);font-size:13px;font-weight:600;border:1px solid var(--gray-400);cursor:pointer;transition:var(--transition);white-space:nowrap}
+.chip:hover{background:rgba(255,255,255,.08)}.chip.active{background:var(--white);color:var(--black);border-color:var(--white)}
+
+.event-card{border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .3s,box-shadow .3s}
+.event-card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.event-card .img{position:relative;aspect-ratio:3/4;overflow:hidden}
+.event-card .img-bg{width:100%;height:100%;transition:transform .5s}
+.event-card:hover .img-bg{transform:scale(1.05)}
+.event-card .badge{position:absolute;top:12px;padding:6px 14px;border-radius:var(--radius);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.event-card .badge-cat{left:12px;background:rgba(0,0,0,.7)}.event-card .badge-price{right:12px;background:var(--white);color:var(--black)}.event-card .badge-free{background:#22c55e;color:var(--white)}
+.event-card .info{padding:16px 4px}
+.event-card .info h3{font-family:var(--font-display);font-size:22px;font-weight:800;line-height:1.35;margin-bottom:8px}
+.event-card .info .artist-name{color:var(--gray-600);font-size:15px;font-weight:500;margin-bottom:10px}
+.event-card .meta{display:flex;flex-direction:column;gap:4px;color:var(--gray-500);font-size:13px;font-weight:500}
+.event-card .meta span{display:flex;align-items:center;gap:6px}
+.event-card .meta svg{width:14px;height:14px;flex-shrink:0}
+
+.carousel-wrap{position:relative}
+.carousel{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:8px}
+.carousel::-webkit-scrollbar{display:none}
+.carousel-item{scroll-snap-align:start;flex-shrink:0;width:300px}
+.carousel-item .card-img{position:relative;width:300px;height:420px;border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .3s}
+.carousel-item .card-img:hover{transform:scale(1.03)}
+.carousel-item .overlay{position:absolute;inset:0;background:linear-gradient(to top,#000 0%,rgba(0,0,0,.5) 40%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.carousel-item .date-chip{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:8px 12px;text-align:center}
+.carousel-item .date-chip .day{font-family:var(--font-display);font-size:24px;font-weight:800;line-height:1}
+.carousel-item .date-chip .month{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.carousel-item h3{font-family:var(--font-display);font-size:20px;font-weight:800;line-height:1.35;margin-bottom:6px}
+.carousel-item .artist-sm{font-size:13px;font-weight:600;color:var(--gray-600);margin-bottom:8px}
+.carousel-item .bottom-row{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid rgba(255,255,255,.15)}
+.carousel-item .bottom-row .from{font-size:11px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em}
+.carousel-item .bottom-row .price{font-family:var(--font-display);font-size:22px;font-weight:800}
+.carousel-item .venue-sm{font-size:12px;color:var(--gray-500);display:flex;align-items:center;gap:4px;margin-bottom:4px}
+.carousel-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.8);border:1.5px solid var(--gray-400);display:flex;align-items:center;justify-content:center;z-index:5;transition:var(--transition);opacity:0}
+.carousel-wrap:hover .carousel-nav{opacity:1}
+.carousel-nav:hover{background:rgba(255,255,255,.1);border-color:var(--white)}
+.carousel-nav.prev{left:-16px}.carousel-nav.next{right:-16px}
+
+.feature-card{text-align:center;padding:40px 28px;border:1.5px solid var(--gray-400);border-radius:20px;transition:var(--transition)}
+.feature-card:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.03)}
+.feature-card .icon-wrap{width:56px;height:56px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center}
+.feature-card h3{font-family:var(--font-display);font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
+.feature-card p{color:var(--gray-500);font-size:14px;font-weight:500;line-height:1.5}
+
+.text-outline{-webkit-text-stroke:2px var(--white);-webkit-text-fill-color:transparent}
+.view{display:none;animation:fadeIn .35s ease}.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.divider{display:flex;align-items:center;gap:16px;color:var(--gray-500);font-size:13px;margin:24px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--gray-400)}
+
+.accordion-item{border-bottom:1px solid var(--gray-300)}
+.accordion-btn{width:100%;text-align:left;padding:20px 0;font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;transition:color .2s}
+.accordion-btn:hover{color:var(--gray-600)}
+.accordion-btn svg{transition:transform .25s;flex-shrink:0;margin-left:16px}
+.accordion-btn.open svg{transform:rotate(180deg)}
+.accordion-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.accordion-body.open{max-height:500px}
+.accordion-body p{padding:0 0 20px;color:var(--gray-500);font-size:15px;line-height:1.7}
+
+.wizard-progress{display:flex;align-items:center;gap:8px;margin-bottom:40px}
+.wizard-dot{width:40px;height:4px;border-radius:4px;background:var(--gray-400);transition:background .3s}
+.wizard-dot.active{background:var(--white)}.wizard-dot.done{background:var(--green)}
+.wizard-card{padding:24px;border:1.5px solid var(--gray-400);border-radius:16px;cursor:pointer;transition:var(--transition)}
+.wizard-card:hover{border-color:var(--white);background:rgba(255,255,255,.03)}
+.wizard-card.selected{border-color:var(--white);background:rgba(255,255,255,.06)}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--white);color:var(--black);padding:14px 28px;border-radius:var(--radius);font-weight:600;font-size:14px;z-index:1000;transition:transform .4s cubic-bezier(.4,0,.2,1);pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+.qr-mock{width:200px;height:200px;background:var(--white);border-radius:12px;padding:12px;margin:0 auto}
+.qr-mock svg{width:100%;height:100%}
+.sidebar-sticky{position:sticky;top:96px}
+.qty-selector{display:flex;align-items:center;gap:12px}
+.qty-btn{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;transition:var(--transition)}
+.qty-btn:hover:not(:disabled){background:rgba(255,255,255,.2)}
+.qty-val{font-family:var(--font-display);font-size:22px;font-weight:800;width:40px;text-align:center}
+.avatar{border-radius:50%;overflow:hidden;flex-shrink:0}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.check-anim{width:80px;height:80px;border-radius:50%;border:3px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:popIn .5s cubic-bezier(.4,0,.2,1)}
+@keyframes popIn{0%{transform:scale(0);opacity:0}60%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:32px}
+.mobile-menu.open{display:flex}
+.mobile-menu a,.mobile-menu button{font-family:var(--font-display);font-size:28px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+
+@media(max-width:1024px){.grid-3{grid-template-columns:repeat(2,1fr)}.header-search{display:none}.nav-links .nav-link{display:none}.text-7xl{font-size:48px}.text-6xl{font-size:40px}}
+@media(max-width:640px){.grid-3,.grid-2{grid-template-columns:1fr}.text-7xl{font-size:36px}.text-6xl{font-size:32px}.text-5xl{font-size:28px}.carousel-item{width:260px}.carousel-item .card-img{width:260px;height:360px}.event-detail-grid{grid-template-columns:1fr !important}.sidebar-sticky{position:static}}
+</style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<div id="mobileMenu" class="mobile-menu">
+  <button onclick="closeMobileMenu()" style="position:absolute;top:20px;right:20px;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--gray-400);display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  <a href="#home" onclick="closeMobileMenu()">Inicio</a>
+  <a href="#events" onclick="closeMobileMenu()">Eventos</a>
+  <a href="#mytickets" onclick="closeMobileMenu()">Mis Tickets</a>
+  <a href="#waitinglist" onclick="closeMobileMenu()">Waiting List</a>
+  <a href="#create" onclick="closeMobileMenu()">Crear Evento</a>
+  <a href="#faq" onclick="closeMobileMenu()">Ayuda</a>
+  <a href="#login" onclick="closeMobileMenu()" class="btn btn-primary" style="font-size:16px">Ingresar</a>
+</div>
+<header class="header" id="mainHeader">
+  <div class="header-inner">
+    <span class="logo" onclick="navigate('home')">KET</span>
+    <div class="header-search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Buscar eventos, artistas, lugares..." id="headerSearch" oninput="handleHeaderSearch(this.value)">
+    </div>
+    <div class="nav-links">
+      <a href="#events" class="nav-link">Eventos</a>
+      <a href="#mytickets" class="nav-link">Mis Tickets</a>
+      <a href="#create" class="nav-link">Crear</a>
+      <a href="#login" class="btn btn-primary btn-sm" id="loginBtn">Ingresar</a>
+      <button style="display:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--gray-400);align-items:center;justify-content:center" onclick="openMobileMenu()" id="menuBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="view-home" class="view active">
+  <section style="padding:60px 0 40px"><div class="container text-center">
+    <h1 class="font-display text-7xl font-black uppercase tracking-tight leading-tight" style="margin-bottom:8px">Busca tu<br><span class="text-outline">Proximo Evento</span></h1>
+    <div style="max-width:680px;margin:32px auto 16px;position:relative">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);opacity:.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="input input-lg" type="text" placeholder="Busca eventos, artistas, venues..." id="heroSearch" oninput="handleHeroSearch(this.value)" style="width:100%">
+    </div>
+    <div class="flex gap-8" style="justify-content:center;margin-bottom:24px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span class="text-sm text-gray" style="opacity:.7">Eventos cerca de Santiago</span>
+    </div>
+    <div class="flex gap-8" style="justify-content:center;flex-wrap:wrap;margin-bottom:12px">
+      <span class="chip" onclick="navigate('events')">Hoy</span>
+      <span class="chip" onclick="navigate('events')">Esta Semana</span>
+      <span class="chip" onclick="navigate('events')">Gratis</span>
+    </div>
+    <div class="flex gap-8" style="justify-content:center;flex-wrap:wrap">
+      <span class="chip" onclick="navigate('events')">Todos</span>
+      <span class="chip" onclick="navigate('events')">Musica</span>
+      <span class="chip" onclick="navigate('events')">Arte</span>
+      <span class="chip" onclick="navigate('events')">Comedia</span>
+      <span class="chip" onclick="navigate('events')">Cine</span>
+    </div>
+  </div></section>
+  <section style="padding:48px 0" class="reveal"><div class="container">
+    <div class="flex flex-between" style="margin-bottom:28px">
+      <h2 class="font-display text-3xl font-black uppercase tracking-tight">Te Podria Interesar</h2>
+      <a href="#events" class="nav-link text-sm">Ver todos &rarr;</a>
+    </div>
+    <div class="carousel-wrap">
+      <button class="carousel-nav prev" onclick="scrollCarousel('trending',-320)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="carousel" id="carousel-trending"></div>
+      <button class="carousel-nav next" onclick="scrollCarousel('trending',320)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+  </div></section>
+  <section style="padding:64px 0" class="reveal"><div class="container">
+    <div class="grid-3" style="max-width:960px;margin:0 auto">
+      <div class="feature-card">
+        <div class="icon-wrap"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 15c2-1.5 6-1.5 8 0M9.5 9h.01M14.5 9h.01"/></svg></div>
+        <h3>Personalizado</h3><p>Conecta Spotify y descubre eventos de tus artistas favoritos</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon-wrap"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20M6 14h4"/></svg></div>
+        <h3>Transparente</h3><p>Paga directo desde tu banco con Fintoc. Sin intermediarios.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon-wrap"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg></div>
+        <h3>Seguro</h3><p>Codigos QR dinamicos y sistema anti-reventa integrado</p>
+      </div>
+    </div>
+    <p class="text-xs uppercase tracking-wide text-gray text-center" style="margin-top:64px">Plataforma de Tickets Para Fans</p>
+  </div></section>
+</div>
+
+<div id="view-login" class="view">
+  <div style="min-height:calc(100vh - 72px);display:flex;align-items:center;justify-content:center;padding:40px 20px">
+    <div class="card" style="max-width:420px;width:100%;padding:40px">
+      <div class="text-center" style="margin-bottom:32px">
+        <div class="font-display text-5xl font-black" style="margin-bottom:8px">KET</div>
+        <p class="text-gray text-sm">Inicia sesion o registrate</p>
+      </div>
+      <form onsubmit="handleLogin(event)">
+        <div style="margin-bottom:16px"><label class="label">Email</label><input class="input" type="email" placeholder="tu@email.com" required></div>
+        <div style="margin-bottom:20px"><label class="label">Password</label><input class="input" type="password" placeholder="********" required></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;height:48px">Iniciar Sesion</button>
+      </form>
+      <div class="divider">o</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <button class="btn btn-outline" style="width:100%" onclick="handleLogin(event)">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continuar con Google
+        </button>
+        <button class="btn btn-green" style="width:100%" onclick="handleLogin(event)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--white)"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+          Continuar con Spotify
+        </button>
+        <p class="text-xs text-gray text-center" style="margin-top:4px">Conecta Spotify para recomendaciones personalizadas segun tus artistas favoritos</p>
+      </div>
+      <div class="text-center" style="margin-top:24px">
+        <p class="text-sm text-gray">No tienes cuenta? <a href="#" onclick="handleRegister(event)" style="color:var(--white);font-weight:600">Registrate aqui</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="view-events" class="view">
+  <div class="container" style="padding:48px 20px 80px">
+    <div style="margin-bottom:48px">
+      <h1 class="font-display text-6xl font-black uppercase tracking-tight leading-tight" style="margin-bottom:8px">Descubre<br><span class="text-outline">Eventos</span></h1>
+      <p class="text-xl text-gray font-bold" style="max-width:560px;margin-top:16px">Eventos culturales, musica emergente, charlas y experiencias en tu ciudad.</p>
+    </div>
+    <div class="flex gap-8" style="flex-wrap:wrap;margin-bottom:16px" id="quickFilters"></div>
+    <div class="flex flex-between" style="flex-wrap:wrap;gap:16px;margin-bottom:40px;padding-bottom:20px;border-bottom:1px solid var(--gray-300)">
+      <h2 class="font-display text-3xl font-black uppercase tracking-tight" id="eventsTitle">Todos los Eventos</h2>
+      <div class="flex gap-8" style="flex-wrap:wrap" id="catFilters"></div>
+    </div>
+    <div class="grid-3" id="eventsGrid" style="gap:40px 24px"></div>
+    <div class="text-center" style="margin-top:64px;padding-top:48px;border-top:1px solid var(--gray-300)">
+      <button class="btn btn-outline btn-lg" onclick="showToast('Mas eventos cargados')">Cargar Mas Eventos</button>
+    </div>
+  </div>
+</div>
+
+<div id="view-event" class="view"><div id="eventDetail"></div></div>
+<div id="view-artist" class="view"><div id="artistDetail"></div></div>
+<div id="view-checkout" class="view"><div id="checkoutContent"></div></div>
+<div id="view-mytickets" class="view"><div id="myTicketsContent"></div></div>
+<div id="view-waitinglist" class="view"><div id="waitingListContent"></div></div>
+<div id="view-create" class="view"><div id="createContent"></div></div>
+<div id="view-faq" class="view"><div id="faqContent"></div></div>
+
+<script>
+const E=[
+{id:'e1',title:'Open Klub',artist:'Marcel Fengler, Paàl, Altinbas, VIL, Hyden, Steya',as:'',cat:'musica',venue:'Matucana 100',city:'Est. Central',date:'Vie 6 Feb',time:'18:00',doors:'18:00',price:15000,avail:320,desc:'Seis artistas europeos de musica electronica en esta nueva edicion del proyecto techno respaldado por Techno Youth y Panal Records. Early Bird 1: $15.000 / Early Bird 2: $18.000 / General: $20.000. Venue: Huerta + Explanada al aire libre.',genres:['Techno','Electronica'],gr:'linear-gradient(135deg,#0a0a0a,#1a0033,#2d0066)',img:'https://www.m100.cl/wp-content/uploads/2026/01/openklub_Cartelera_720x720.png'},
+{id:'e2',title:'Jazz Club - Club Subterraneo',artist:'Jazz Club Santiago',as:'',cat:'musica',venue:'Club Subterraneo',city:'Santiago',date:'Mie 11 Feb',time:'21:00',doors:'20:30',price:8000,avail:85,desc:'Noche de jazz en vivo en el iconico Club Subterraneo. Los mejores exponentes del jazz chileno en un ambiente intimo y underground.',genres:['Jazz','En Vivo'],gr:'linear-gradient(135deg,#14213d,#1b263b,#415a77)',img:'https://ticketing-uploads-1.ticketplus.global/images/thumbs/b1f4cc4946e4924effb2f903eb9d7da2db1ef49d.jpg'},
+{id:'e3',title:'Open Mike: Coronel Valverde',artist:'Coronel Valverde',as:'coronel-valverde',cat:'comedia',venue:'El Honesto Mike Vitacura',city:'Vitacura',date:'Sab 21 Feb',time:'20:00',doors:'19:00',price:12000,avail:45,desc:'Open Mike presenta: Coronel Valverde. Show de stand up comedy en El Honesto Mike Vitacura. Puertas 19:00, show 20:00. Segundo piso. Comida y bebidas no incluidas.',genres:['Comedia','Stand Up'],gr:'linear-gradient(135deg,#2b2d42,#8d99ae,#3a0ca3)',img:'https://kn6kang47jzl4ttd.public.blob.vercel-storage.com/nlPCr7V458725QVtmZJfI.jpeg'},
+{id:'e4',title:'Catas Ratas: Hasta Pronto',artist:'El Honesto Mike',as:'',cat:'restaurante',venue:'El Honesto Mike Lastarria',city:'Santiago Centro',date:'Mar 24 Feb',time:'19:30',doors:'19:30',price:0,free:true,avail:40,desc:'No money? No problem! Degustaciones gratis de cerveza en la casa de Mike. Martes 24 de febrero en Lastarria. Maximo 2 cupos por persona.',genres:['Gastronomia','Cerveza'],gr:'linear-gradient(135deg,#1a1a1a,#2d2d0a,#3d3d00)',img:'https://kn6kang47jzl4ttd.public.blob.vercel-storage.com/CRqVMyKu519DUckHtUHS6-5W1l0VDjiDmfIsuJQwmiUkpgSZ1nIY.jpeg'},
+{id:'e5',title:'Melodias de Verano: Roberto Bravo',artist:'Roberto Bravo',as:'roberto-bravo',cat:'musica',venue:'Terraza CEP',city:'Providencia',date:'Mar 27 Ene',time:'18:30',doors:'18:00',price:0,free:true,avail:120,desc:'Concierto de musica latinoamericana con el pianista Roberto Bravo. Ciclo Melodias de Verano en la Terraza CEP, Monsenor Sotero Sanz 162, Providencia. Inscripcion previa requerida.',genres:['Clasica','Jazz'],gr:'linear-gradient(135deg,#0d1b2a,#1b2838,#2a3f54)',img:'https://static.cepchile.cl/uploads/cepchile/2025/12/21-183630_8ta5_7-Web-.jpeg'},
+{id:'e6',title:'Dia del Tomate',artist:'Chefs y Productores',as:'',cat:'arte',venue:'MUT Piso 4',city:'Las Condes',date:'Sab 28 Feb',time:'11:00',doors:'11:00',price:0,free:true,avail:500,desc:'Segunda edicion del Dia del Tomate en MUT. 40 stands con agricultores, chefs y emprendedores en una celebracion unica. Platos de chefs destacados y cocteles. Av. Apoquindo 2730.',genres:['Gastronomia','Feria'],gr:'linear-gradient(135deg,#3d0000,#660000,#8b0000)',img:'https://mut.cl/content/uploads/2026/02/Tarjeta-web-2026-colaboradores_600x485.jpg'},
+{id:'e7',title:'Open Mike: Pau San Martin',artist:'Pau San Martin',as:'pau-san-martin',cat:'comedia',venue:'El Honesto Mike Vitacura',city:'Vitacura',date:'Mar 3 Mar',time:'21:00',doors:'19:30',price:8000,avail:38,desc:'Open Mike presenta: Pau San Martin. Show de stand up comedy. Puertas 19:30, show 21:00. Av. Vitacura 4607 esquina Vespucio. Segundo piso.',genres:['Comedia','Stand Up'],gr:'linear-gradient(135deg,#1a1a2e,#3a0ca3,#5c2d91)',img:'https://kn6kang47jzl4ttd.public.blob.vercel-storage.com/Ce_7dOr9OcrvwYDrd2fRk.jpeg'},
+{id:'e8',title:'La Torre Ambulante Vol.22',artist:'La Torre Ambulante',as:'',cat:'restaurante',venue:'Barra de Pickles',city:'Nunoa',date:'Mar 20 Ene',time:'20:00',doors:'20:00',price:10000,avail:0,desc:'La segunda fecha del ano vuelve a un bar muy pedido. Torneo para todos los niveles, cerveza, DJ de vinilos y premios de sponsors. 24 cupos. San Eugenio 40, Nunoa.',genres:['Social','Gastronomia'],gr:'linear-gradient(135deg,#0d0d0d,#1b4332,#2d6a4f)',img:'https://cdn.shopify.com/s/files/1/0898/4277/8477/files/WhatsAppImage2026-01-18at12.01.34.jpg?v=1768748663'},
+{id:'e9',title:'7mo Aniversario DAME',artist:'DAME',as:'',cat:'musica',venue:'Teatro Caupolican',city:'Santiago Centro',date:'Sab 15 Mar',time:'22:00',doors:'21:00',price:25000,avail:0,desc:'10 horas de baile y musica en el Teatro Caupolican. Septimo aniversario de DAME. Evento solo para mayores de 21 anos.',genres:['Electronica','Fiesta'],gr:'linear-gradient(135deg,#240046,#3c096c,#5a189a)',img:'https://static.ptocdn.net/images/eventos/div269_calugalistado.jpg'},
+{id:'e10',title:'Stick Men en Teatro Nescafe',artist:'Stick Men',as:'',cat:'musica',venue:'Teatro Nescafe de las Artes',city:'Providencia',date:'Vie 7 Mar',time:'20:30',doors:'20:00',price:35000,avail:180,desc:'Stick Men, el trio de rock progresivo formado por Tony Levin (King Crimson), Pat Mastelotto y Markus Reuter, se presentan en vivo en el Teatro Nescafe de las Artes.',genres:['Rock','Progresivo'],gr:'linear-gradient(135deg,#1a0000,#2d1b00,#3d2e00)'},
+{id:'e11',title:'Yoga y Pilates en MUT',artist:'Mel Studio',as:'',cat:'arte',venue:'MUT Piso 5',city:'Las Condes',date:'Lun-Sab',time:'19:15',doors:'19:00',price:5000,avail:30,desc:'Clases de yoga y pilates en el piso 5 de MUT frente al puente de madera. Lun-Jue 19:15, Vie 18:00, Sab 11:00. Av. Apoquindo 2730, Las Condes.',genres:['Bienestar','Deporte'],gr:'linear-gradient(135deg,#0a2e1a,#1b4332,#2d6a4f)',img:'https://mut.cl/content/uploads/2025/12/Mel-studio_600x485.png'},
+{id:'e12',title:'Gata Feria Providencia',artist:'Emprendedores Locales',as:'',cat:'arte',venue:'Calle Francisco Noguera',city:'Providencia',date:'Vie-Sab',time:'11:00',doors:'11:00',price:0,free:true,avail:999,desc:'Feria de emprendedores que resalta el arte y diseno. Todos los viernes y sabados de 11:00 a 19:30 hrs en calle Francisco Noguera entre Av. Providencia y Andres Bello.',genres:['Feria','Arte'],gr:'linear-gradient(135deg,#2d2d00,#4a4a00,#666600)',img:'https://www.providencia.cl/provi/site/artic/20230829/imag/foto_0000012120230829183752/WhatsApp_Image_2023-07-31_at_09.jpeg'}
+];
+const A=[
+{slug:'coronel-valverde',name:'Coronel Valverde',genres:['Comedia','Stand Up'],bio:'Comediante chileno del circuito Open Mike. Su humor directo y observacional sobre la vida cotidiana lo ha convertido en uno de los favoritos del stand up en Santiago.',followers:8500,events:2,top:'Show Open Mike 2026',gr:'linear-gradient(135deg,#2b2d42,#8d99ae)',img:'https://kn6kang47jzl4ttd.public.blob.vercel-storage.com/nlPCr7V458725QVtmZJfI.jpeg'},
+{slug:'roberto-bravo',name:'Roberto Bravo',genres:['Clasica','Jazz','Latinoamericana'],bio:'Pianista chileno de renombre internacional. Ha dedicado su carrera a difundir la musica latinoamericana y clasica, realizando conciertos en los escenarios mas importantes del mundo.',followers:125000,events:3,top:'Melodias de Verano',gr:'linear-gradient(135deg,#0d1b2a,#1b2838)',img:'https://static.cepchile.cl/uploads/cepchile/2025/12/21-183630_8ta5_7-Web-.jpeg'},
+{slug:'pau-san-martin',name:'Pau San Martin',genres:['Comedia','Stand Up'],bio:'Comediante emergente del circuito Open Mike en Santiago. Su estilo fresco y cercano conecta con audiencias jovenes en cada presentacion.',followers:4200,events:2,top:'Show Open Mike 2026',gr:'linear-gradient(135deg,#1a1a2e,#3a0ca3)',img:'https://kn6kang47jzl4ttd.public.blob.vercel-storage.com/Ce_7dOr9OcrvwYDrd2fRk.jpeg'}
+];
+const F=[
+{cat:'Compra de Entradas',items:[{q:'Como compro entradas en KET?',a:'Busca tu evento, selecciona la cantidad de tickets y procede al pago. Puedes pagar con Fintoc, MercadoPago o tarjeta.'},{q:'Cual es el maximo de entradas?',a:'Puedes comprar hasta 10 entradas por transaccion para evitar la reventa.'},{q:'Que es la comision de servicio?',a:'KET cobra un 5% + $500 CLP por transaccion. Cubre procesamiento, QR dinamicos y soporte.'}]},
+{cat:'Reembolsos',items:[{q:'Puedo pedir un reembolso?',a:'Si, hasta 48 horas antes del evento. Despues depende de la politica del organizador.'},{q:'Cuanto tarda el reembolso?',a:'5-10 dias habiles dependiendo del metodo de pago.'}]},
+{cat:'Mi Cuenta',items:[{q:'Como conecto Spotify?',a:'Ve a tu perfil, selecciona Conectar Spotify y autoriza KET para recomendaciones personalizadas.'},{q:'Como transfiero un ticket?',a:'En Mis Tickets, selecciona el ticket, haz clic en Transferir e ingresa el email del destinatario.'}]},
+{cat:'Organizadores',items:[{q:'Como creo un evento?',a:'Haz clic en Crear y sigue el asistente paso a paso con info basica, ubicacion, precios y cobro.'},{q:'Cuanto cobra KET?',a:'La comision se cobra al comprador. Organizadores reciben el 100% del precio con liquidaciones semanales.'}]}
+];
+const IC={cal:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',pin:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',usr:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',chev:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>',back:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>',play:'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',check:'<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>',share:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>',wa:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>',sp:'<svg width="20" height="20" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>',yt:'<svg width="20" height="20" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',ig:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>'};
+
+let S={view:'home',logged:false,cat:null,filt:null,cEv:null,cQty:1,cDisc:0,pay:null,cStep:0,cData:{type:'venta',seats:false,name:'',desc:'',cat:'musica',date:'',venue:'',city:'',tName:'General',tPrice:25000,tQty:200,payM:'fintoc'},follows:new Set(),myTickets:[],pendingAction:null,tastes:{},tastesDone:false,waitingList:[]};
+
+function navigate(v){window.location.hash=v}
+function parseHash(){const h=window.location.hash.slice(1)||'home';const[r,...rest]=h.split('?');return{route:r,params:new URLSearchParams(rest.join('?'))}}
+
+function handleRoute(){
+  const{route}=parseHash();const parts=route.split('/');const vn=parts[0];const vi=parts[1]||null;
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const el=document.getElementById('view-'+vn);
+  if(el){el.classList.add('active');S.view=vn}else{document.getElementById('view-home').classList.add('active');S.view='home'}
+  if(vn==='events')renderEvents();
+  else if(vn==='event')renderEventDetail(vi||'e1');
+  else if(vn==='artist')renderArtist(vi||'marcelo-vasquez');
+  else if(vn==='checkout')renderCheckout();
+  else if(vn==='mytickets')renderMyTickets();
+  else if(vn==='waitinglist')renderWaitingList();
+  else if(vn==='create')renderCreate();
+  else if(vn==='faq')renderFAQ();
+  else if(vn==='home')renderHome();
+  window.scrollTo({top:0,behavior:'smooth'});
+  initReveal();
+}
+window.addEventListener('hashchange',handleRoute);
+
+function renderHome(){
+  const c=document.getElementById('carousel-trending');
+  c.textContent='';
+  E.slice(0,6).forEach(ev=>{
+    const item=document.createElement('div');item.className='carousel-item';
+    item.onclick=()=>navigate('event/'+ev.id);
+    const d=document.createElement('div');d.className='card-img';d.style.background=ev.gr;if(ev.img){d.style.backgroundImage='url('+ev.img+')';d.style.backgroundSize='cover';d.style.backgroundPosition='center'}
+    const chip=document.createElement('div');chip.className='date-chip';
+    const day=document.createElement('div');day.className='day';day.textContent=ev.date.split(' ')[1];
+    const mon=document.createElement('div');mon.className='month';mon.textContent=ev.date.split(' ')[2];
+    chip.append(day,mon);
+    const ov=document.createElement('div');ov.className='overlay';
+    const h3=document.createElement('h3');h3.textContent=ev.title;
+    const art=document.createElement('div');art.className='artist-sm';art.textContent=ev.artist;
+    const ven=document.createElement('div');ven.className='venue-sm';ven.textContent=ev.venue+', '+ev.city;
+    const br=document.createElement('div');br.className='bottom-row';
+    const fr=document.createElement('div');const frL=document.createElement('div');frL.className='from';frL.textContent=ev.avail===0?'':'Desde';fr.append(frL);
+    const pr=document.createElement('div');pr.className='price';if(ev.avail===0){pr.textContent='Sold Out';pr.style.color='#ef4444';pr.style.fontSize='16px'}else{pr.textContent=ev.free?'Gratis':'$'+ev.price.toLocaleString('es-CL')}
+    br.append(fr,pr);ov.append(h3,art,ven,br);d.append(chip,ov);item.append(d);c.append(item);
+  });
+}
+
+function renderEvents(){
+  const cats=[{k:'Todos',v:null},{k:'Musica',v:'musica'},{k:'Arte',v:'arte'},{k:'Comedia',v:'comedia'},{k:'Gastronomia',v:'restaurante'},{k:'Cine',v:'cine'}];
+  const quicks=[{k:'Hoy',v:'today'},{k:'Esta Semana',v:'week'},{k:'Gratis',v:'free'}];
+  const qf=document.getElementById('quickFilters');qf.textContent='';
+  quicks.forEach(f=>{const s=document.createElement('span');s.className='chip'+(S.filt===f.v?' active':'');s.textContent=f.k;s.onclick=()=>{S.filt=S.filt===f.v?null:f.v;S.cat=null;renderEvents()};qf.append(s)});
+  const cf=document.getElementById('catFilters');cf.textContent='';
+  cats.forEach(c=>{const s=document.createElement('span');s.className='chip'+((S.cat||null)===c.v?' active':'');s.textContent=c.k;s.onclick=()=>{S.cat=c.v;S.filt=null;renderEvents()};cf.append(s)});
+  let filtered=[...E];
+  if(S.cat)filtered=filtered.filter(e=>e.cat===S.cat);
+  if(S.filt==='free')filtered=filtered.filter(e=>e.free);
+  const t=S.cat?cats.find(c=>c.v===S.cat)?.k||'Eventos':'Todos los Eventos';
+  document.getElementById('eventsTitle').textContent=t;
+  const g=document.getElementById('eventsGrid');g.textContent='';
+  filtered.forEach(ev=>{
+    const card=document.createElement('div');card.className='event-card';card.onclick=()=>navigate('event/'+ev.id);
+    const imgW=document.createElement('div');imgW.className='img';
+    const imgBg=document.createElement('div');imgBg.className='img-bg';imgBg.style.background=ev.gr;if(ev.img){imgBg.style.backgroundImage='url('+ev.img+')';imgBg.style.backgroundSize='cover';imgBg.style.backgroundPosition='center'}
+    const bCat=document.createElement('span');bCat.className='badge badge-cat';bCat.textContent=ev.genres[0];
+    const bPr=document.createElement('span');
+    if(ev.avail===0){bPr.className='badge';bPr.style.cssText='background:#ef4444;color:white';bPr.textContent='Sold Out'}
+    else{bPr.className='badge '+(ev.free?'badge-free':'badge-price');bPr.textContent=ev.free?'Gratis':'$'+ev.price.toLocaleString('es-CL')}
+    imgW.append(imgBg,bCat,bPr);
+    const info=document.createElement('div');info.className='info';
+    const h3=document.createElement('h3');h3.textContent=ev.title;
+    const an=document.createElement('div');an.className='artist-name';an.textContent=ev.artist;
+    const meta=document.createElement('div');meta.className='meta';
+    const s1=document.createElement('span');s1.innerHTML=IC.cal+' '+ev.date+' - '+ev.time;
+    const s2=document.createElement('span');s2.innerHTML=IC.pin+' '+ev.venue+', '+ev.city;
+    meta.append(s1,s2);
+    const btnW=document.createElement('div');btnW.style.marginTop='16px';
+    const btn=document.createElement('button');btn.className='btn btn-primary btn-sm';btn.style.width='100%';btn.textContent='Obtener Tickets';
+    btn.onclick=(e)=>{e.stopPropagation();navigate('event/'+ev.id)};
+    btnW.append(btn);info.append(h3,an,meta,btnW);card.append(imgW,info);g.append(card);
+  });
+}
+
+function renderEventDetail(id){
+  const ev=E.find(e=>e.id===id);if(!ev){navigate('events');return}
+  S.cEv=ev;S.cQty=1;S.cDisc=0;
+  const a=A.find(x=>x.slug===ev.as);
+  const el=document.getElementById('eventDetail');el.textContent='';
+  // Hero
+  const hero=document.createElement('div');hero.style.cssText='height:360px;background:'+ev.gr+';position:relative;background-size:cover;background-position:center';if(ev.img){hero.style.backgroundImage='url('+ev.img+')'}
+  const heroOv=document.createElement('div');heroOv.style.cssText='position:absolute;inset:0;background:linear-gradient(to top,#000 0%,transparent 60%)';
+  hero.append(heroOv);
+  // Content wrapper
+  const wrap=document.createElement('div');wrap.className='container';wrap.style.cssText='margin-top:-60px;position:relative;z-index:2;padding-bottom:80px';
+  const grid=document.createElement('div');grid.className='event-detail-grid';grid.style.cssText='display:grid;grid-template-columns:1fr 380px;gap:40px';
+  // Left col
+  const left=document.createElement('div');
+  // Genres
+  const gDiv=document.createElement('div');gDiv.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px';
+  ev.genres.forEach(g=>{const c=document.createElement('span');c.className='chip btn-sm';c.textContent=g;gDiv.append(c)});
+  // Title
+  const h1=document.createElement('h1');h1.className='font-display text-5xl font-black leading-tight';h1.style.marginBottom='20px';h1.textContent=ev.title;
+  // Meta
+  const metaD=document.createElement('div');metaD.style.cssText='display:flex;flex-direction:column;gap:10px;margin-bottom:32px;color:var(--gray-600)';
+  const m1=document.createElement('span');m1.className='flex gap-8';m1.innerHTML=IC.cal+' <span>'+ev.date+' - Puertas: '+ev.doors+' | Evento: '+ev.time+'</span>';
+  const m2=document.createElement('span');m2.className='flex gap-8';m2.innerHTML=IC.pin+' <span>'+ev.venue+' - '+ev.city+'</span>';
+  const m3=document.createElement('span');m3.className='flex gap-8';m3.innerHTML=IC.usr+' <span>'+ev.avail+' tickets disponibles</span>';
+  metaD.append(m1,m2,m3);
+  // About card
+  const aboutCard=document.createElement('div');aboutCard.className='card';aboutCard.style.marginBottom='20px';
+  const aboutH=document.createElement('h2');aboutH.className='font-display text-xl font-bold';aboutH.style.marginBottom='12px';aboutH.textContent='Acerca del Evento';
+  const aboutP=document.createElement('p');aboutP.className='text-gray-light';aboutP.style.lineHeight='1.7';aboutP.textContent=ev.desc;
+  aboutCard.append(aboutH,aboutP);
+  // Artist card
+  const artCard=document.createElement('div');artCard.className='card';artCard.style.cssText='margin-bottom:20px;cursor:pointer';
+  if(a)artCard.onclick=()=>navigate('artist/'+a.slug);
+  const artH=document.createElement('h2');artH.className='font-display text-xl font-bold';artH.style.marginBottom='12px';artH.textContent='Artista';
+  const artN=document.createElement('h3');artN.className='text-lg font-bold';artN.style.marginBottom='6px';artN.textContent=ev.artist;
+  artCard.append(artH,artN);
+  if(a){const artP=document.createElement('p');artP.className='text-gray text-sm';artP.textContent=a.bio.substring(0,120)+'...';const sp=document.createElement('span');sp.style.cssText='color:var(--white);font-weight:600;margin-left:4px';sp.textContent='Ver perfil';artP.append(sp);artCard.append(artP)}
+  // Venue card
+  const venCard=document.createElement('div');venCard.className='card';venCard.style.marginBottom='20px';
+  const venH=document.createElement('h2');venH.className='font-display text-xl font-bold';venH.style.marginBottom='12px';venH.textContent='Ubicacion';
+  const venN=document.createElement('h3');venN.className='text-lg font-bold';venN.style.marginBottom='4px';venN.textContent=ev.venue;
+  const venA=document.createElement('p');venA.className='text-gray text-sm';venA.style.marginBottom='16px';venA.textContent=ev.city+', Chile';
+  const mapP=document.createElement('div');mapP.style.cssText='height:180px;background:var(--gray-200);border-radius:12px;display:flex;align-items:center;justify-content:center';
+  const mapT=document.createElement('span');mapT.className='text-sm text-gray';mapT.textContent='Mapa - '+ev.venue;mapP.append(mapT);
+  venCard.append(venH,venN,venA,mapP);
+  // Share
+  const shareCard=document.createElement('div');shareCard.className='card';
+  const shareH=document.createElement('div');shareH.className='flex gap-8';shareH.style.marginBottom='16px';shareH.innerHTML=IC.share+' <h3 class="font-bold">Compartir evento</h3>';
+  const shareG=document.createElement('div');shareG.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:8px';
+  ['WhatsApp','Twitter','Facebook','Copiar link'].forEach(n=>{const b=document.createElement('button');b.className='btn btn-ghost btn-sm';b.textContent=n;b.onclick=()=>showToast(n==='Copiar link'?'Link copiado':'Compartido');shareG.append(b)});
+  shareCard.append(shareH,shareG);
+
+  left.append(gDiv,h1,metaD,aboutCard,artCard,venCard,shareCard);
+
+  // Right col - sidebar
+  const right=document.createElement('div');
+  const sidebar=document.createElement('div');sidebar.className='card sidebar-sticky';sidebar.style.border='1.5px solid var(--gray-400)';
+  const isSoldOut=ev.avail===0;
+  const inWL=S.waitingList.some(w=>w.eventId===ev.id);
+
+  if(isSoldOut){
+    // SOLD OUT sidebar
+    const soB=document.createElement('div');soB.style.cssText='text-align:center;padding:8px 0 20px';
+    const soTag=document.createElement('div');soTag.style.cssText='display:inline-block;padding:8px 24px;border-radius:9999px;font-family:var(--font-display);font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;background:rgba(239,68,68,.12);color:#ef4444;border:1.5px solid rgba(239,68,68,.3);margin-bottom:16px';soTag.textContent='Sold Out';
+    const soP=document.createElement('p');soP.className='text-sm text-gray';soP.style.marginBottom='4px';soP.textContent='Precio original';
+    const soV=document.createElement('p');soV.className='font-display text-3xl font-black';soV.style.cssText='margin-bottom:20px;text-decoration:line-through;opacity:.4';soV.textContent=ev.free?'Gratis':'$'+ev.price.toLocaleString('es-CL');
+    soB.append(soTag,soP,soV);sidebar.append(soB);
+
+    // Waiting list info
+    const wlInfo=document.createElement('div');wlInfo.style.cssText='padding:16px;border-radius:12px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.15);margin-bottom:20px';
+    const wlH=document.createElement('p');wlH.className='font-bold text-sm';wlH.style.cssText='color:#fbbf24;margin-bottom:6px';wlH.textContent='Waiting List disponible';
+    const wlP=document.createElement('p');wlP.className='text-xs text-gray';wlP.style.lineHeight='1.5';wlP.textContent='Si se libera un cupo, tendras 15 minutos para completar tu compra. Si no, la lista avanza al siguiente.';
+    wlInfo.append(wlH,wlP);sidebar.append(wlInfo);
+
+    if(inWL){
+      const wlPos=S.waitingList.findIndex(w=>w.eventId===ev.id);
+      const alreadyDiv=document.createElement('div');alreadyDiv.style.cssText='text-align:center;padding:12px;border-radius:12px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);margin-bottom:16px';
+      const aP1=document.createElement('p');aP1.className='text-sm font-bold';aP1.style.color='#22c55e';aP1.textContent='Estas en la Waiting List';
+      const aP2=document.createElement('p');aP2.className='font-display text-2xl font-black';aP2.style.cssText='color:#22c55e;margin:4px 0';aP2.textContent='Posicion #'+(wlPos+1);
+      alreadyDiv.append(aP1,aP2);sidebar.append(alreadyDiv);
+      const wlBtn=document.createElement('button');wlBtn.className='btn btn-outline btn-lg';wlBtn.style.width='100%';wlBtn.textContent='Ver Mi Waiting List';wlBtn.onclick=()=>navigate('waitinglist');
+      sidebar.append(wlBtn);
+    }else{
+      // Fake queue count
+      const fakeAhead=Math.floor(Math.random()*25)+8;
+      const queueP=document.createElement('p');queueP.className='text-sm text-gray text-center';queueP.style.marginBottom='16px';queueP.textContent=fakeAhead+' personas en la lista';
+      sidebar.append(queueP);
+      const wlBtn=document.createElement('button');wlBtn.className='btn btn-primary btn-lg';wlBtn.style.width='100%';
+      wlBtn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg> Sumarme a la Waiting List';
+      wlBtn.onclick=()=>{
+        if(!S.logged){S.pendingAction='event/'+ev.id;navigate('login');return}
+        const ahead=Math.floor(Math.random()*25)+8;
+        S.waitingList.push({eventId:ev.id,title:ev.title,artist:ev.artist,date:ev.date,venue:ev.venue,city:ev.city,img:ev.img,gr:ev.gr,price:ev.price,joinedAt:new Date().toLocaleString('es-CL'),position:ahead+1,totalAhead:ahead,fakeUsers:generateFakeQueue(ahead)});
+        showToast('Te uniste a la Waiting List!');
+        renderEventDetail(ev.id);
+      };
+      sidebar.append(wlBtn);
+    }
+    const secP=document.createElement('p');secP.className='text-xs text-gray text-center';secP.style.marginTop='12px';secP.textContent='Te notificaremos si se libera un cupo';
+    sidebar.append(secP);
+  }else{
+    // Normal sidebar (available tickets)
+    const pLabel=document.createElement('p');pLabel.className='text-sm text-gray';pLabel.style.marginBottom='4px';pLabel.textContent='Precio por ticket';
+    const pVal=document.createElement('p');pVal.className='font-display text-4xl font-black';pVal.style.marginBottom='20px';pVal.textContent=ev.free?'Gratis':'$'+ev.price.toLocaleString('es-CL');
+    sidebar.append(pLabel,pVal);
+    if(ev.avail>0&&ev.avail<50){const warn=document.createElement('div');warn.style.cssText='padding:10px;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);margin-bottom:16px';const wp=document.createElement('p');wp.className='text-sm';wp.style.cssText='color:#ef4444;font-weight:600';wp.textContent='Solo quedan '+ev.avail+' tickets!';warn.append(wp);sidebar.append(warn)}
+    // Qty
+    const qtyW=document.createElement('div');qtyW.style.marginBottom='20px';
+    const qtyL=document.createElement('label');qtyL.className='label';qtyL.textContent='Cantidad';
+    const qtyS=document.createElement('div');qtyS.className='qty-selector';
+    const qM=document.createElement('button');qM.className='qty-btn';qM.textContent='-';qM.onclick=()=>updQty(-1);
+    const qV=document.createElement('span');qV.className='qty-val';qV.id='qtyVal';qV.textContent='1';
+    const qP=document.createElement('button');qP.className='qty-btn';qP.textContent='+';qP.onclick=()=>updQty(1);
+    qtyS.append(qM,qV,qP);
+    const qtyN=document.createElement('p');qtyN.className='text-xs text-gray';qtyN.style.marginTop='8px';qtyN.textContent='Maximo 10 tickets por compra';
+    qtyW.append(qtyL,qtyS,qtyN);sidebar.append(qtyW);
+    // Discount
+    const discW=document.createElement('div');discW.style.marginBottom='20px';
+    const discL=document.createElement('label');discL.className='label';discL.textContent='Codigo de descuento';
+    const discR=document.createElement('div');discR.className='flex gap-8';
+    const discI=document.createElement('input');discI.className='input';discI.id='discountInput';discI.placeholder='CODIGO';discI.style.flex='1';
+    const discB=document.createElement('button');discB.className='btn btn-outline btn-sm';discB.textContent='Aplicar';discB.onclick=applyDiscount;
+    discR.append(discI,discB);discW.append(discL,discR);sidebar.append(discW);
+    // Summary
+    const sumW=document.createElement('div');sumW.id='priceSummary';sumW.style.cssText='padding:16px;background:var(--gray-100);border-radius:12px;margin-bottom:20px';
+    renderPriceSum(sumW,ev,1,0);sidebar.append(sumW);
+    // Buy btn
+    const buyB=document.createElement('button');buyB.className='btn btn-primary btn-lg';buyB.style.width='100%';buyB.textContent='Comprar Tickets';buyB.onclick=()=>{if(!S.logged){S.pendingAction='checkout';navigate('login')}else{navigate('checkout')}};
+    const secP=document.createElement('p');secP.className='text-xs text-gray text-center';secP.style.marginTop='12px';secP.textContent='Pagos 100% seguros con Fintoc';
+    sidebar.append(buyB,secP);
+  }
+  right.append(sidebar);
+
+  grid.append(left,right);wrap.append(grid);el.append(hero,wrap);
+}
+
+function renderPriceSum(el,ev,qty,disc){
+  el.textContent='';
+  if(ev.free){const p=document.createElement('p');p.className='text-center font-bold';p.textContent='Entrada Gratuita';el.append(p);return}
+  const sub=ev.price*qty;const fee=Math.ceil(sub*.05)+500;const d=disc>0?Math.ceil(sub*disc/100):0;const total=sub+fee-d;
+  function row(l,v,color){const r=document.createElement('div');r.className='flex flex-between text-sm';r.style.marginBottom='8px';if(color)r.style.color=color;const s1=document.createElement('span');s1.className=color?'':'text-gray';s1.textContent=l;const s2=document.createElement('span');s2.textContent=v;r.append(s1,s2);return r}
+  el.append(row('Subtotal','$'+sub.toLocaleString('es-CL')));
+  el.append(row('Comision','$'+fee.toLocaleString('es-CL')));
+  if(d>0)el.append(row('Descuento (-'+disc+'%)','-$'+d.toLocaleString('es-CL'),'var(--green)'));
+  const hr=document.createElement('div');hr.style.cssText='border-top:1px solid var(--gray-300);padding-top:10px;margin-top:8px';hr.className='flex flex-between';
+  const tl=document.createElement('span');tl.className='font-bold';tl.textContent='Total';
+  const tv=document.createElement('span');tv.className='font-display text-2xl font-black';tv.textContent='$'+total.toLocaleString('es-CL');
+  hr.append(tl,tv);el.append(hr);
+}
+
+function updQty(d){S.cQty=Math.max(1,Math.min(10,S.cQty+d));document.getElementById('qtyVal').textContent=S.cQty;if(S.cEv)renderPriceSum(document.getElementById('priceSummary'),S.cEv,S.cQty,S.cDisc)}
+
+function applyDiscount(){
+  const code=document.getElementById('discountInput').value.trim().toUpperCase();
+  if(code==='KET10'||code==='PROMO'){S.cDisc=10;showToast('Descuento del 10% aplicado')}
+  else if(code==='KET20'){S.cDisc=20;showToast('Descuento del 20% aplicado')}
+  else{showToast('Codigo invalido');return}
+  if(S.cEv)renderPriceSum(document.getElementById('priceSummary'),S.cEv,S.cQty,S.cDisc);
+}
+
+function renderArtist(slug){
+  const a=A.find(x=>x.slug===slug);if(!a){navigate('events');return}
+  const aEv=E.filter(e=>e.as===slug);const isF=S.follows.has(slug);
+  const el=document.getElementById('artistDetail');el.textContent='';
+  // Hero
+  const hero=document.createElement('section');hero.style.cssText='position:relative;min-height:50vh;display:flex;align-items:flex-end';
+  const bg=document.createElement('div');bg.style.cssText='position:absolute;inset:0;background:'+a.gr+';opacity:.4;background-size:cover;background-position:center';if(a.img){bg.style.backgroundImage='url('+a.img+')';bg.style.opacity='.3'}
+  const ov=document.createElement('div');ov.style.cssText='position:absolute;inset:0;background:linear-gradient(to top,#000 10%,rgba(0,0,0,.5) 50%,transparent)';
+  const hc=document.createElement('div');hc.className='container';hc.style.cssText='position:relative;z-index:2;padding-bottom:40px';
+  const hf=document.createElement('div');hf.className='flex gap-24';hf.style.cssText='flex-wrap:wrap;align-items:flex-end';
+  // Avatar
+  const av=document.createElement('div');av.className='avatar';av.style.cssText='width:180px;height:180px;border:3px solid var(--gray-400)';
+  const avI=document.createElement('div');avI.style.cssText='width:100%;height:100%;background:'+a.gr+';display:flex;align-items:center;justify-content:center;background-size:cover;background-position:center';
+  if(a.img){avI.style.backgroundImage='url('+a.img+')'}else{const avT=document.createElement('span');avT.className='font-display text-5xl font-black';avT.style.opacity='.5';avT.textContent=a.name[0];avI.append(avT)}
+  av.append(avI);
+  // Info
+  const info=document.createElement('div');info.style.cssText='flex:1;min-width:260px';
+  const h1=document.createElement('h1');h1.className='font-display text-5xl font-black';h1.style.marginBottom='12px';h1.textContent=a.name;
+  const gw=document.createElement('div');gw.className='flex gap-8';gw.style.cssText='flex-wrap:wrap;margin-bottom:16px';
+  a.genres.forEach(g=>{const c=document.createElement('span');c.className='chip btn-sm';c.textContent=g;gw.append(c)});
+  const stats=document.createElement('div');stats.className='flex gap-24 text-gray';stats.style.marginBottom='16px';
+  const st1=document.createElement('span');st1.innerHTML=IC.usr+' <strong style="color:var(--white)">'+a.followers.toLocaleString()+'</strong> seguidores';
+  const st2=document.createElement('span');st2.innerHTML=IC.cal+' <strong style="color:var(--white)">'+a.events+'</strong> eventos';
+  stats.append(st1,st2);
+  const fb=document.createElement('button');fb.className='btn '+(isF?'btn-outline':'btn-primary')+' btn-sm';fb.textContent=isF?'Siguiendo':'Seguir';
+  fb.onclick=()=>{if(S.follows.has(slug))S.follows.delete(slug);else S.follows.add(slug);showToast(S.follows.has(slug)?'Siguiendo artista':'Dejaste de seguir');renderArtist(slug)};
+  info.append(h1,gw,stats,fb);hf.append(av,info);hc.append(hf);hero.append(bg,ov,hc);
+
+  // Body
+  const body=document.createElement('div');body.className='container';body.style.cssText='padding:48px 20px 80px';
+  const bgrid=document.createElement('div');bgrid.className='event-detail-grid';bgrid.style.cssText='display:grid;grid-template-columns:2fr 1fr;gap:40px';
+  const bleft=document.createElement('div');
+  // Bio
+  const bioS=document.createElement('section');bioS.style.marginBottom='40px';
+  const bioH=document.createElement('h2');bioH.className='font-display text-2xl font-bold';bioH.style.marginBottom='16px';bioH.textContent='Sobre '+a.name;
+  const bioP=document.createElement('p');bioP.className='text-gray-light';bioP.style.cssText='line-height:1.8;font-size:17px';bioP.textContent=a.bio;
+  bioS.append(bioH,bioP);
+  // Top track
+  const trackS=document.createElement('section');trackS.style.marginBottom='40px';
+  const trackH=document.createElement('h2');trackH.className='font-display text-2xl font-bold';trackH.style.marginBottom='16px';trackH.textContent='Tema mas popular';
+  const trackC=document.createElement('div');trackC.className='card flex gap-16';trackC.style.cursor='pointer';trackC.onclick=()=>showToast('Reproduciendo: '+a.top);
+  const trackI=document.createElement('div');trackI.style.cssText='width:56px;height:56px;border-radius:12px;background:'+a.gr+';display:flex;align-items:center;justify-content:center;flex-shrink:0';
+  trackI.innerHTML=IC.play;
+  const trackT=document.createElement('div');
+  const ttn=document.createElement('p');ttn.className='font-bold';ttn.textContent=a.top;
+  const tta=document.createElement('p');tta.className='text-sm text-gray';tta.textContent=a.name;
+  trackT.append(ttn,tta);trackC.append(trackI,trackT);trackS.append(trackH,trackC);
+  bleft.append(bioS,trackS);
+  // Events
+  if(aEv.length){
+    const evS=document.createElement('section');
+    const evH=document.createElement('h2');evH.className='font-display text-2xl font-bold';evH.style.marginBottom='20px';evH.textContent='Proximos eventos';
+    const evG=document.createElement('div');evG.className='grid-2';evG.style.gap='16px';
+    aEv.forEach(ev=>{
+      const c=document.createElement('div');c.className='card';c.style.cssText='cursor:pointer;padding:0;overflow:hidden';c.onclick=()=>navigate('event/'+ev.id);
+      const ci=document.createElement('div');ci.style.cssText='height:120px;background:'+ev.gr+';background-size:cover;background-position:center';if(ev.img){ci.style.backgroundImage='url('+ev.img+')'}
+      const cp=document.createElement('div');cp.style.padding='16px';
+      const ch=document.createElement('h3');ch.className='font-display font-bold';ch.style.marginBottom='4px';ch.textContent=ev.title;
+      const cd=document.createElement('p');cd.className='text-sm text-gray';cd.textContent=ev.date+' - '+ev.venue;
+      const cpr=document.createElement('p');cpr.className='font-display font-black';cpr.style.marginTop='8px';cpr.textContent=ev.free?'Gratis':'$'+ev.price.toLocaleString('es-CL');
+      cp.append(ch,cd,cpr);c.append(ci,cp);evG.append(c);
+    });
+    evS.append(evH,evG);bleft.append(evS);
+  }
+  // Right - links
+  const bright=document.createElement('div');
+  const linksC=document.createElement('div');linksC.className='card';
+  const linksH=document.createElement('h3');linksH.className='font-bold';linksH.style.marginBottom='16px';linksH.textContent='Enlaces';
+  const linksL=document.createElement('div');linksL.style.cssText='display:flex;flex-direction:column;gap:10px';
+  [{icon:IC.sp,name:'Abrir en Spotify'},{icon:IC.yt,name:'YouTube'},{icon:IC.ig,name:'Instagram'}].forEach(l=>{
+    const la=document.createElement('a');la.className='flex gap-12 btn-ghost btn-sm';la.style.cssText='border-radius:12px;padding:12px 16px;cursor:pointer';
+    la.innerHTML=l.icon+' <span class="font-bold">'+l.name+'</span>';la.onclick=()=>showToast('Abriendo '+l.name);linksL.append(la);
+  });
+  linksC.append(linksH,linksL);bright.append(linksC);
+  bgrid.append(bleft,bright);body.append(bgrid);el.append(hero,body);
+}
+
+function renderCheckout(){
+  const ev=S.cEv;const el=document.getElementById('checkoutContent');el.textContent='';
+  if(!ev){
+    const w=document.createElement('div');w.className='container text-center';w.style.padding='120px 20px';
+    const h=document.createElement('h2');h.className='font-display text-3xl font-black';h.style.marginBottom='12px';h.textContent='Tu carrito esta vacio';
+    const p=document.createElement('p');p.className='text-gray';p.style.marginBottom='24px';p.textContent='Agrega algunos tickets para continuar';
+    const b=document.createElement('button');b.className='btn btn-primary';b.textContent='Ver Eventos';b.onclick=()=>navigate('events');
+    w.append(h,p,b);el.append(w);return;
+  }
+  const sub=ev.price*S.cQty;const fee=Math.ceil(sub*.05)+500;const disc=S.cDisc>0?Math.ceil(sub*S.cDisc/100):0;const total=sub+fee-disc;
+  const wrap=document.createElement('div');wrap.className='container';wrap.style.cssText='padding:48px 20px 80px;max-width:1000px';
+  // Back
+  const bk=document.createElement('button');bk.className='flex gap-8 text-gray';bk.style.marginBottom='24px';bk.innerHTML=IC.back+' Volver al evento';bk.onclick=()=>navigate('event/'+ev.id);
+  const h1=document.createElement('h1');h1.className='font-display text-4xl font-black';h1.style.marginBottom='32px';h1.textContent='Checkout';
+  const grid=document.createElement('div');grid.className='event-detail-grid';grid.style.cssText='display:grid;grid-template-columns:1fr 360px;gap:32px';
+  // Left
+  const left=document.createElement('div');
+  // Summary card
+  const sc=document.createElement('div');sc.className='card';sc.style.marginBottom='20px';
+  const sh=document.createElement('h2');sh.className='font-display text-xl font-bold';sh.style.marginBottom='16px';sh.textContent='Resumen de Compra';
+  const sd=document.createElement('div');sd.style.cssText='padding:16px;background:var(--gray-100);border-radius:12px;border:1px solid var(--gray-300)';
+  const sn=document.createElement('h3');sn.className='font-bold';sn.textContent=ev.title;
+  const sdt=document.createElement('p');sdt.className='text-sm text-gray';sdt.textContent=ev.date+' - '+ev.venue;
+  const sr=document.createElement('div');sr.className='flex flex-between';sr.style.marginTop='12px';
+  const srl=document.createElement('span');srl.className='text-gray text-sm';srl.textContent=S.cQty+' x $'+ev.price.toLocaleString('es-CL');
+  const srv=document.createElement('span');srv.className='font-bold';srv.textContent='$'+sub.toLocaleString('es-CL');
+  sr.append(srl,srv);sd.append(sn,sdt,sr);sc.append(sh,sd);
+  // Payment card
+  const pc=document.createElement('div');pc.className='card';
+  const ph=document.createElement('h2');ph.className='font-display text-xl font-bold';ph.style.marginBottom='16px';ph.textContent='Metodo de Pago';
+  const pg=document.createElement('div');pg.style.cssText='display:flex;flex-direction:column;gap:12px';
+  [{k:'fintoc',n:'Fintoc',d:'Pago directo desde tu banco'},{k:'mp',n:'MercadoPago',d:'Tarjeta o saldo MercadoPago'},{k:'card',n:'Tarjeta Credito/Debito',d:'Visa, Mastercard, Amex'}].forEach(m=>{
+    const mc=document.createElement('div');mc.className='wizard-card'+(S.pay===m.k?' selected':'');mc.onclick=()=>{S.pay=m.k;renderCheckout()};
+    const mn=document.createElement('h3');mn.className='font-bold';mn.textContent=m.n;
+    const md=document.createElement('p');md.className='text-sm text-gray';md.textContent=m.d;
+    mc.append(mn,md);pg.append(mc);
+  });
+  pc.append(ph,pg);left.append(sc,pc);
+  // Right - total
+  const right=document.createElement('div');
+  const tc=document.createElement('div');tc.className='card sidebar-sticky';tc.style.border='1.5px solid var(--gray-400)';
+  const th=document.createElement('h2');th.className='font-display text-lg font-bold';th.style.marginBottom='16px';th.textContent='Total';
+  const ts=document.createElement('div');ts.style.marginBottom='20px';
+  function trow(l,v,c){const r=document.createElement('div');r.className='flex flex-between text-sm';r.style.marginBottom='8px';if(c)r.style.color=c;const s1=document.createElement('span');s1.textContent=l;if(!c)s1.className='text-gray';const s2=document.createElement('span');s2.textContent=v;r.append(s1,s2);return r}
+  ts.append(trow('Subtotal','$'+sub.toLocaleString('es-CL')));
+  ts.append(trow('Comision','$'+fee.toLocaleString('es-CL')));
+  if(disc>0)ts.append(trow('Descuento','-$'+disc.toLocaleString('es-CL'),'var(--green)'));
+  const thr=document.createElement('div');thr.className='flex flex-between';thr.style.cssText='border-top:1px solid var(--gray-300);padding-top:12px;margin-top:8px';
+  const ttl=document.createElement('span');ttl.className='font-bold';ttl.textContent='Total';
+  const ttv=document.createElement('span');ttv.className='font-display text-2xl font-black';ttv.textContent='$'+total.toLocaleString('es-CL');
+  thr.append(ttl,ttv);ts.append(thr);
+  const payB=document.createElement('button');payB.className='btn btn-primary btn-lg';payB.style.width='100%';payB.textContent='Proceder al Pago';payB.disabled=!S.pay;payB.onclick=processPayment;
+  tc.append(th,ts,payB);right.append(tc);
+  grid.append(left,right);wrap.append(bk,h1,grid);el.append(wrap);
+}
+
+function processPayment(){
+  if(!S.pay||!S.cEv)return;const ev=S.cEv;
+  // Save tickets to myTickets
+  for(let i=0;i<S.cQty;i++){
+    S.myTickets.push({id:'TK-'+Date.now()+'-'+i,eventId:ev.id,title:ev.title,artist:ev.artist,date:ev.date,time:ev.time,doors:ev.doors,venue:ev.venue,city:ev.city,img:ev.img,gr:ev.gr,qty:1,purchasedAt:new Date().toLocaleString('es-CL'),status:'active',transferred:false,transferTo:null,qrSeed:Math.random()});
+  }
+  const el=document.getElementById('checkoutContent');el.textContent='';
+  const w=document.createElement('div');w.className='container text-center';w.style.cssText='padding:100px 20px;max-width:520px';
+  const ca=document.createElement('div');ca.className='check-anim';ca.innerHTML=IC.check;
+  const h1=document.createElement('h1');h1.className='font-display text-4xl font-black';h1.style.marginBottom='8px';h1.textContent='Compra Exitosa!';
+  const p1=document.createElement('p');p1.className='text-gray';p1.style.marginBottom='32px';p1.textContent=S.cQty+' entrada'+(S.cQty>1?'s':'')+' para '+ev.title;
+  const dc=document.createElement('div');dc.className='card';dc.style.cssText='margin-bottom:32px;text-align:left';
+  function dr(l,v){const r=document.createElement('div');r.className='flex flex-between';r.style.marginBottom='12px';const s1=document.createElement('span');s1.className='text-gray text-sm';s1.textContent=l;const s2=document.createElement('span');s2.className='font-bold';s2.textContent=v;r.append(s1,s2);return r}
+  dc.append(dr('Evento',ev.title),dr('Fecha',ev.date),dr('Venue',ev.venue+', '+ev.city),dr('Tickets',''+S.cQty));
+  const qr=document.createElement('div');qr.className='qr-mock';qr.style.marginBottom='32px';
+  qr.append(makeQR());
+  const qn=document.createElement('p');qn.className='text-xs text-gray';qn.style.marginBottom='24px';qn.textContent='QR dinamico - se renueva cada 15 minutos';
+  const btns=document.createElement('div');btns.className='flex gap-12';btns.style.justifyContent='center';
+  const b1=document.createElement('button');b1.className='btn btn-primary';b1.textContent='Ver Mis Tickets';b1.onclick=()=>navigate('mytickets');
+  const b2=document.createElement('button');b2.className='btn btn-outline';b2.textContent='Explorar Mas';b2.onclick=()=>navigate('events');
+  btns.append(b1,b2);w.append(ca,h1,p1,dc,qr,qn,btns);el.append(w);S.cEv=null;
+}
+
+function makeQR(seed){
+  const qs=document.createElementNS('http://www.w3.org/2000/svg','svg');qs.setAttribute('viewBox','0 0 100 100');
+  const qbg=document.createElementNS('http://www.w3.org/2000/svg','rect');qbg.setAttribute('width','100');qbg.setAttribute('height','100');qbg.setAttribute('fill','white');qs.append(qbg);
+  const s=seed||Math.random();let r=s;function prng(){r=(r*9301+49297)%233280;return r/233280}
+  for(let y=0;y<20;y++)for(let x=0;x<20;x++)if(prng()>.45){const rc=document.createElementNS('http://www.w3.org/2000/svg','rect');rc.setAttribute('x',5+x*4.5);rc.setAttribute('y',5+y*4.5);rc.setAttribute('width','4');rc.setAttribute('height','4');rc.setAttribute('fill','black');qs.append(rc)}
+  [[5,5],[77,5],[5,77]].forEach(([cx,cy])=>{const r1=document.createElementNS('http://www.w3.org/2000/svg','rect');r1.setAttribute('x',cx);r1.setAttribute('y',cy);r1.setAttribute('width','18');r1.setAttribute('height','18');r1.setAttribute('fill','none');r1.setAttribute('stroke','black');r1.setAttribute('stroke-width','3');const r2=document.createElementNS('http://www.w3.org/2000/svg','rect');r2.setAttribute('x',cx+5);r2.setAttribute('y',cy+5);r2.setAttribute('width','8');r2.setAttribute('height','8');r2.setAttribute('fill','black');qs.append(r1,r2)});
+  return qs;
+}
+
+function renderMyTickets(){
+  const el=document.getElementById('myTicketsContent');el.textContent='';
+  if(!S.logged){S.pendingAction='mytickets';navigate('login');return}
+  const wrap=document.createElement('div');wrap.className='container';wrap.style.cssText='padding:48px 20px 80px;max-width:900px';
+  const h1=document.createElement('h1');h1.className='font-display text-4xl font-black';h1.style.marginBottom='8px';h1.textContent='Mis Tickets';
+  const sub=document.createElement('p');sub.className='text-gray';sub.style.marginBottom='32px';
+  const active=S.myTickets.filter(t=>t.status==='active'&&!t.transferred);
+  const transferred=S.myTickets.filter(t=>t.transferred);
+  sub.textContent=active.length+' ticket'+(active.length!==1?'s':'')+' activo'+(active.length!==1?'s':'');
+  wrap.append(h1,sub);
+
+  if(S.myTickets.length===0){
+    const empty=document.createElement('div');empty.className='text-center';empty.style.padding='80px 20px';
+    const ei=document.createElement('div');ei.style.cssText='width:80px;height:80px;margin:0 auto 24px;border-radius:50%;border:2px solid var(--gray-400);display:flex;align-items:center;justify-content:center';ei.innerHTML='<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.4"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>';
+    const eh=document.createElement('h2');eh.className='font-display text-2xl font-bold';eh.style.marginBottom='8px';eh.textContent='No tienes tickets aun';
+    const ep=document.createElement('p');ep.className='text-gray';ep.style.marginBottom='24px';ep.textContent='Compra entradas para ver tus tickets aqui';
+    const eb=document.createElement('button');eb.className='btn btn-primary';eb.textContent='Explorar Eventos';eb.onclick=()=>navigate('events');
+    empty.append(ei,eh,ep,eb);wrap.append(empty);el.append(wrap);return;
+  }
+
+  // Active tickets
+  if(active.length>0){
+    const secH=document.createElement('h2');secH.className='font-display text-xl font-bold';secH.style.marginBottom='16px';secH.textContent='Activos';
+    wrap.append(secH);
+    active.forEach(tk=>{
+      const card=document.createElement('div');card.className='card';card.style.cssText='margin-bottom:20px;padding:0;overflow:hidden';
+      // Top bar with image
+      const top=document.createElement('div');top.style.cssText='display:flex;gap:0';
+      const imgD=document.createElement('div');imgD.style.cssText='width:140px;min-height:160px;background:'+tk.gr+';background-size:cover;background-position:center;flex-shrink:0';
+      if(tk.img){imgD.style.backgroundImage='url('+tk.img+')'}
+      const info=document.createElement('div');info.style.cssText='flex:1;padding:20px';
+      const tit=document.createElement('h3');tit.className='font-display text-xl font-bold';tit.style.marginBottom='6px';tit.textContent=tk.title;
+      const art=document.createElement('p');art.className='text-sm text-gray';art.style.marginBottom='10px';art.textContent=tk.artist;
+      const meta=document.createElement('div');meta.style.cssText='display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--gray-500)';
+      const m1=document.createElement('span');m1.className='flex gap-8';m1.innerHTML=IC.cal+' '+tk.date+' - Puertas: '+tk.doors+' | Show: '+tk.time;
+      const m2=document.createElement('span');m2.className='flex gap-8';m2.innerHTML=IC.pin+' '+tk.venue+', '+tk.city;
+      meta.append(m1,m2);
+      const badge=document.createElement('span');badge.style.cssText='display:inline-block;margin-top:10px;padding:4px 12px;border-radius:9999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3)';badge.textContent='Activo';
+      info.append(tit,art,meta,badge);top.append(imgD,info);
+
+      // QR section
+      const qrSec=document.createElement('div');qrSec.style.cssText='padding:20px;border-top:1px dashed var(--gray-300);display:flex;align-items:center;gap:24px;flex-wrap:wrap';
+      const qrW=document.createElement('div');qrW.style.cssText='width:120px;height:120px;background:white;border-radius:12px;padding:8px;flex-shrink:0';
+      qrW.append(makeQR(tk.qrSeed));
+      const qrInfo=document.createElement('div');qrInfo.style.cssText='flex:1;min-width:200px';
+      const qrT=document.createElement('p');qrT.className='font-display font-bold';qrT.style.marginBottom='4px';qrT.textContent='Ticket #'+tk.id.split('-')[1].slice(-4);
+      const qrN=document.createElement('p');qrN.className='text-xs text-gray';qrN.style.marginBottom='12px';qrN.textContent='QR dinamico - se renueva cada 15 min para tu seguridad';
+      // Timer
+      const timer=document.createElement('div');timer.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:12px';
+      const timerDot=document.createElement('div');timerDot.style.cssText='width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite';
+      const timerT=document.createElement('span');timerT.className='text-xs';timerT.style.color='#22c55e';timerT.textContent='QR activo';
+      timer.append(timerDot,timerT);
+
+      // Action buttons
+      const actions=document.createElement('div');actions.style.cssText='display:flex;gap:8px;flex-wrap:wrap';
+      const btnTransfer=document.createElement('button');btnTransfer.className='btn btn-outline btn-sm';btnTransfer.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> Transferir';
+      btnTransfer.onclick=(e)=>{e.stopPropagation();showTransferModal(tk)};
+      const btnShowQR=document.createElement('button');btnShowQR.className='btn btn-ghost btn-sm';btnShowQR.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><rect x="19" y="14" width="2" height="2"/><rect x="14" y="19" width="2" height="2"/><rect x="19" y="19" width="2" height="2"/></svg> Mostrar QR';
+      btnShowQR.onclick=(e)=>{e.stopPropagation();showFullQR(tk)};
+      const btnMaps=document.createElement('button');btnMaps.className='btn btn-ghost btn-sm';btnMaps.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Ir al evento';
+      btnMaps.onclick=(e)=>{e.stopPropagation();showMapsModal(tk)};
+      actions.append(btnTransfer,btnShowQR,btnMaps);
+      qrInfo.append(qrT,qrN,timer,actions);qrSec.append(qrW,qrInfo);
+
+      card.append(top,qrSec);wrap.append(card);
+    });
+  }
+
+  // Transferred tickets
+  if(transferred.length>0){
+    const secH2=document.createElement('h2');secH2.className='font-display text-xl font-bold';secH2.style.cssText='margin-top:40px;margin-bottom:16px';secH2.textContent='Transferidos';
+    wrap.append(secH2);
+    transferred.forEach(tk=>{
+      const card=document.createElement('div');card.className='card';card.style.cssText='margin-bottom:16px;opacity:.6';
+      const top=document.createElement('div');top.className='flex gap-16';
+      const tit=document.createElement('div');tit.style.flex='1';
+      const h3=document.createElement('h3');h3.className='font-display font-bold';h3.textContent=tk.title;
+      const p=document.createElement('p');p.className='text-sm text-gray';p.textContent=tk.date+' - '+tk.venue;
+      tit.append(h3,p);
+      const badge=document.createElement('span');badge.style.cssText='padding:4px 12px;border-radius:9999px;font-size:11px;font-weight:700;text-transform:uppercase;background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3);height:fit-content';badge.textContent='Transferido a '+tk.transferTo;
+      top.append(tit,badge);card.append(top);wrap.append(card);
+    });
+  }
+
+  el.append(wrap);
+}
+
+function showTransferModal(tk){
+  // Create modal overlay
+  const overlay=document.createElement('div');overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.onclick=(e)=>{if(e.target===overlay)overlay.remove()};
+  const modal=document.createElement('div');modal.style.cssText='background:#111;border:1.5px solid var(--gray-400);border-radius:20px;padding:32px;max-width:440px;width:100%';
+  const mh=document.createElement('h2');mh.className='font-display text-2xl font-bold';mh.style.marginBottom='8px';mh.textContent='Transferir Ticket';
+  const mp=document.createElement('p');mp.className='text-sm text-gray';mp.style.marginBottom='24px';mp.textContent='Envia tu entrada de '+tk.title+' a un amigo';
+  const label=document.createElement('label');label.className='label';label.textContent='Email del destinatario';
+  const input=document.createElement('input');input.className='input';input.type='email';input.placeholder='amigo@email.com';input.style.marginBottom='16px';
+  const label2=document.createElement('label');label2.className='label';label2.textContent='Mensaje (opcional)';
+  const textarea=document.createElement('textarea');textarea.className='textarea';textarea.placeholder='Te regalo esta entrada!';textarea.style.cssText='margin-bottom:24px;min-height:70px';
+  const warn=document.createElement('div');warn.style.cssText='padding:12px;border-radius:10px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);margin-bottom:24px';
+  const wp=document.createElement('p');wp.className='text-xs';wp.style.color='#fbbf24';wp.textContent='Al transferir, tu ticket se desactivara y el destinatario recibira un nuevo QR.';
+  warn.append(wp);
+  const btns=document.createElement('div');btns.className='flex gap-12';
+  const bCancel=document.createElement('button');bCancel.className='btn btn-outline';bCancel.style.flex='1';bCancel.textContent='Cancelar';bCancel.onclick=()=>overlay.remove();
+  const bSend=document.createElement('button');bSend.className='btn btn-primary';bSend.style.flex='1';bSend.textContent='Transferir';
+  bSend.onclick=()=>{
+    const email=input.value.trim();
+    if(!email||!email.includes('@')){showToast('Ingresa un email valido');return}
+    tk.transferred=true;tk.transferTo=email;tk.status='transferred';
+    overlay.remove();showToast('Ticket transferido a '+email);renderMyTickets();
+  };
+  btns.append(bCancel,bSend);modal.append(mh,mp,label,input,label2,textarea,warn,btns);overlay.append(modal);document.body.append(overlay);
+  setTimeout(()=>input.focus(),100);
+}
+
+function showFullQR(tk){
+  const overlay=document.createElement('div');overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.onclick=(e)=>{if(e.target===overlay)overlay.remove()};
+  const modal=document.createElement('div');modal.style.cssText='background:#111;border:1.5px solid var(--gray-400);border-radius:24px;padding:40px;max-width:400px;width:100%;text-align:center';
+  const h2=document.createElement('h2');h2.className='font-display text-xl font-bold';h2.style.marginBottom='4px';h2.textContent=tk.title;
+  const sub=document.createElement('p');sub.className='text-sm text-gray';sub.style.marginBottom='24px';sub.textContent=tk.date+' - '+tk.venue;
+  const qrW=document.createElement('div');qrW.style.cssText='width:260px;height:260px;background:white;border-radius:16px;padding:16px;margin:0 auto 20px';
+  qrW.append(makeQR(tk.qrSeed));
+  const tid=document.createElement('p');tid.className='font-display font-bold';tid.style.marginBottom='4px';tid.textContent='Ticket #'+tk.id.split('-')[1].slice(-4);
+  const timer=document.createElement('div');timer.style.cssText='display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:4px';
+  const dot=document.createElement('div');dot.style.cssText='width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite';
+  const tt=document.createElement('span');tt.className='text-xs';tt.style.color='#22c55e';tt.textContent='QR activo';
+  timer.append(dot,tt);
+  const note=document.createElement('p');note.className='text-xs text-gray';note.style.marginBottom='24px';note.textContent='Muestra este QR en la entrada del evento';
+  const btn=document.createElement('button');btn.className='btn btn-outline';btn.textContent='Cerrar';btn.onclick=()=>overlay.remove();
+  modal.append(h2,sub,qrW,tid,timer,note,btn);overlay.append(modal);document.body.append(overlay);
+}
+
+function showMapsModal(tk){
+  const overlay=document.createElement('div');overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.onclick=(e)=>{if(e.target===overlay)overlay.remove()};
+  const modal=document.createElement('div');modal.style.cssText='background:#111;border:1.5px solid var(--gray-400);border-radius:24px;padding:32px;max-width:400px;width:100%;text-align:center';
+  const h2=document.createElement('h2');h2.className='font-display text-xl font-bold';h2.style.marginBottom='4px';h2.textContent='Ir al evento';
+  const sub=document.createElement('p');sub.className='text-sm text-gray';sub.style.marginBottom='24px';sub.textContent=tk.venue+', '+tk.city;
+  const query=encodeURIComponent(tk.venue+' '+tk.city+' Chile');
+  const btns=document.createElement('div');btns.style.cssText='display:flex;flex-direction:column;gap:12px';
+  // Waze
+  const bWaze=document.createElement('a');bWaze.className='btn btn-outline';bWaze.style.cssText='width:100%;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:10px';
+  bWaze.href='https://waze.com/ul?q='+query;bWaze.target='_blank';bWaze.rel='noopener';
+  bWaze.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 2.3.8 4.4 2.1 6.1L2 22l3.9-2.1C7.6 21.2 9.7 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm-2.5 7.5c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5S8 11.8 8 11s.7-1.5 1.5-1.5zm5 0c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5S13 11.8 13 11s.7-1.5 1.5-1.5zm-5.5 6c0 0 1.5 2 3 2s3-2 3-2"/></svg> Abrir en Waze';
+  // Google Maps
+  const bGmaps=document.createElement('a');bGmaps.className='btn btn-outline';bGmaps.style.cssText='width:100%;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:10px';
+  bGmaps.href='https://www.google.com/maps/search/?api=1&query='+query;bGmaps.target='_blank';bGmaps.rel='noopener';
+  bGmaps.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Abrir en Google Maps';
+  const bCancel=document.createElement('button');bCancel.className='btn btn-ghost';bCancel.style.marginTop='4px';bCancel.textContent='Cancelar';bCancel.onclick=()=>overlay.remove();
+  btns.append(bWaze,bGmaps);modal.append(h2,sub,btns,bCancel);overlay.append(modal);document.body.append(overlay);
+}
+
+function generateFakeQueue(count){
+  const fakes=[];
+  for(let i=0;i<count;i++){
+    const mins=Math.floor(Math.random()*180)+5;
+    fakes.push({pos:i+1,joinedAgo:mins<60?mins+'m':Math.floor(mins/60)+'h '+mins%60+'m'});
+  }
+  return fakes;
+}
+
+function renderWaitingList(){
+  const el=document.getElementById('waitingListContent');el.textContent='';
+  if(!S.logged){S.pendingAction='waitinglist';navigate('login');return}
+  const wrap=document.createElement('div');wrap.className='container';wrap.style.cssText='padding:48px 20px 80px;max-width:900px';
+  const h1=document.createElement('h1');h1.className='font-display text-4xl font-black';h1.style.marginBottom='8px';h1.textContent='Mi Waiting List';
+  const sub=document.createElement('p');sub.className='text-gray';sub.style.marginBottom='32px';sub.textContent=S.waitingList.length+' evento'+(S.waitingList.length!==1?'s':'')+' en espera';
+  wrap.append(h1,sub);
+
+  if(S.waitingList.length===0){
+    const empty=document.createElement('div');empty.className='text-center';empty.style.padding='80px 20px';
+    const ei=document.createElement('div');ei.style.cssText='width:80px;height:80px;margin:0 auto 24px;border-radius:50%;border:2px solid var(--gray-400);display:flex;align-items:center;justify-content:center';
+    ei.innerHTML='<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>';
+    const eh=document.createElement('h2');eh.className='font-display text-2xl font-bold';eh.style.marginBottom='8px';eh.textContent='No estas en ninguna lista';
+    const ep=document.createElement('p');ep.className='text-gray';ep.style.marginBottom='24px';ep.textContent='Cuando un evento se agote, puedes sumarte a su waiting list';
+    const eb=document.createElement('button');eb.className='btn btn-primary';eb.textContent='Explorar Eventos';eb.onclick=()=>navigate('events');
+    empty.append(ei,eh,ep,eb);wrap.append(empty);el.append(wrap);return;
+  }
+
+  S.waitingList.forEach((wl,idx)=>{
+    const card=document.createElement('div');card.className='card';card.style.cssText='margin-bottom:24px;padding:0;overflow:hidden';
+
+    // Top: event info
+    const top=document.createElement('div');top.style.cssText='display:flex;gap:0';
+    const imgD=document.createElement('div');imgD.style.cssText='width:140px;min-height:140px;background:'+wl.gr+';background-size:cover;background-position:center;flex-shrink:0';
+    if(wl.img){imgD.style.backgroundImage='url('+wl.img+')'}
+    const info=document.createElement('div');info.style.cssText='flex:1;padding:20px';
+    const tit=document.createElement('h3');tit.className='font-display text-xl font-bold';tit.style.marginBottom='4px';tit.textContent=wl.title;
+    const art=document.createElement('p');art.className='text-sm text-gray';art.style.marginBottom='6px';art.textContent=wl.artist;
+    const meta=document.createElement('div');meta.style.cssText='font-size:13px;color:var(--gray-500);display:flex;flex-direction:column;gap:3px';
+    const m1=document.createElement('span');m1.className='flex gap-8';m1.innerHTML=IC.cal+' '+wl.date;
+    const m2=document.createElement('span');m2.className='flex gap-8';m2.innerHTML=IC.pin+' '+wl.venue+', '+wl.city;
+    meta.append(m1,m2);
+    const soldTag=document.createElement('span');soldTag.style.cssText='display:inline-block;margin-top:8px;padding:3px 10px;border-radius:9999px;font-size:10px;font-weight:700;text-transform:uppercase;background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.25)';soldTag.textContent='Sold Out';
+    info.append(tit,art,meta,soldTag);top.append(imgD,info);
+
+    // Position highlight
+    const posBar=document.createElement('div');posBar.style.cssText='padding:20px;background:rgba(251,191,36,.04);border-top:1px solid var(--gray-300)';
+    const posRow=document.createElement('div');posRow.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:16px';
+    const posLeft=document.createElement('div');
+    const posLabel=document.createElement('p');posLabel.className='text-xs text-gray uppercase tracking-wide';posLabel.textContent='Tu posicion';
+    const posNum=document.createElement('p');posNum.className='font-display text-3xl font-black';posNum.style.color='#fbbf24';posNum.textContent='#'+wl.position;
+    posLeft.append(posLabel,posNum);
+    const posRight=document.createElement('div');posRight.style.textAlign='right';
+    const totLabel=document.createElement('p');totLabel.className='text-xs text-gray uppercase tracking-wide';totLabel.textContent='Personas en la lista';
+    const totNum=document.createElement('p');totNum.className='font-display text-3xl font-black';totNum.textContent=''+(wl.totalAhead+1);
+    posRight.append(totLabel,totNum);
+    posRow.append(posLeft,posRight);
+
+    // Visual progress bar
+    const progW=document.createElement('div');progW.style.cssText='width:100%;height:6px;border-radius:3px;background:var(--gray-300);margin-bottom:16px;overflow:hidden';
+    const progFill=document.createElement('div');
+    const pct=Math.max(5,100-((wl.position-1)/(wl.totalAhead+1))*100);
+    progFill.style.cssText='height:100%;border-radius:3px;background:linear-gradient(90deg,#fbbf24,#f59e0b);transition:width 1s ease;width:'+pct+'%';
+    progW.append(progFill);
+
+    // Leaderboard
+    const lbH=document.createElement('p');lbH.className='text-xs text-gray uppercase tracking-wide font-bold';lbH.style.marginBottom='10px';lbH.textContent='Leaderboard';
+    const lbList=document.createElement('div');lbList.style.cssText='display:flex;flex-direction:column;gap:4px';
+
+    // Show some entries before user, then user, then some after
+    const myPos=wl.position;
+    const entries=[];
+    // Top 3
+    for(let i=1;i<=Math.min(3,wl.totalAhead);i++){
+      if(i!==myPos)entries.push({pos:i,isMe:false,ago:wl.fakeUsers[i-1]?wl.fakeUsers[i-1].joinedAgo:'?'});
+    }
+    // Around user
+    for(let i=Math.max(1,myPos-1);i<=Math.min(wl.totalAhead+1,myPos+2);i++){
+      if(!entries.find(e=>e.pos===i)){
+        if(i===myPos)entries.push({pos:i,isMe:true,ago:'Ahora'});
+        else entries.push({pos:i,isMe:false,ago:wl.fakeUsers[i-1]?wl.fakeUsers[i-1].joinedAgo:'?'});
+      }
+    }
+    entries.sort((a,b)=>a.pos-b.pos);
+
+    let lastPos=0;
+    entries.forEach(e=>{
+      if(e.pos>lastPos+1&&lastPos>0){
+        const dots=document.createElement('div');dots.style.cssText='text-align:center;color:var(--gray-500);font-size:12px;padding:2px 0';dots.textContent='...';lbList.append(dots);
+      }
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;padding:8px 12px;border-radius:10px;font-size:13px;'+(e.isMe?'background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25)':'background:var(--gray-100);border:1px solid var(--gray-300)');
+      const posS=document.createElement('span');posS.className='font-display font-bold';posS.style.cssText='width:40px;flex-shrink:0;'+(e.isMe?'color:#fbbf24':'');posS.textContent='#'+e.pos;
+      const nameS=document.createElement('span');nameS.style.cssText='flex:1;'+(e.isMe?'font-weight:700;color:#fbbf24':'color:var(--gray-500)');
+      nameS.textContent=e.isMe?'Tu':'Usuario anonimo';
+      const timeS=document.createElement('span');timeS.className='text-xs text-gray';timeS.textContent=e.isMe?'Ahora':'hace '+e.ago;
+      row.append(posS,nameS,timeS);lbList.append(row);
+      lastPos=e.pos;
+    });
+
+    // Timer info
+    const timerInfo=document.createElement('div');timerInfo.style.cssText='margin-top:16px;padding:12px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--gray-300);display:flex;align-items:center;gap:10px';
+    const timerIc=document.createElement('div');timerIc.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+    const timerTxt=document.createElement('p');timerTxt.className='text-xs text-gray';timerTxt.style.lineHeight='1.4';timerTxt.textContent='Cuando se libere un cupo, tendras 15 minutos para completar la compra. Si no, la lista avanza automaticamente.';
+    timerInfo.append(timerIc,timerTxt);
+
+    // Leave button
+    const leaveBtn=document.createElement('button');leaveBtn.className='btn btn-ghost btn-sm';leaveBtn.style.cssText='margin-top:12px;width:100%;color:var(--gray-500)';leaveBtn.textContent='Salir de la lista';
+    leaveBtn.onclick=()=>{
+      S.waitingList.splice(idx,1);
+      showToast('Saliste de la waiting list');
+      renderWaitingList();
+    };
+
+    posBar.append(posRow,progW,lbH,lbList,timerInfo,leaveBtn);
+    card.append(top,posBar);wrap.append(card);
+  });
+
+  el.append(wrap);
+}
+
+function renderCreate(){
+  const s=S.cStep;const d=S.cData;const el=document.getElementById('createContent');el.textContent='';
+  const wrap=document.createElement('div');wrap.className='container';wrap.style.cssText='padding:48px 20px 80px;max-width:640px';
+  if(s>0){const bk=document.createElement('button');bk.className='flex gap-8 text-gray';bk.style.marginBottom='24px';bk.innerHTML=IC.back+' Volver';bk.onclick=()=>{S.cStep=s-1;renderCreate()};wrap.append(bk)}
+  if(s===6){// Review
+    const h1=document.createElement('h1');h1.className='font-display text-4xl font-black';h1.style.marginBottom='32px';h1.textContent='Revision Final';
+    const rc=document.createElement('div');rc.className='card';rc.style.marginBottom='24px';
+    function rr(l,v){const r=document.createElement('div');r.className='flex flex-between';r.style.marginBottom='12px';const s1=document.createElement('span');s1.className='text-gray text-sm';s1.textContent=l;const s2=document.createElement('span');s2.className='font-bold';s2.textContent=v;r.append(s1,s2);return r}
+    rc.append(rr('Tipo',d.type==='venta'?'Con Venta':'Invitaciones'),rr('Nombre',d.name||'Sin nombre'),rr('Categoria',d.cat),rr('Fecha',d.date||'No definida'),rr('Venue',(d.venue||'?')+', '+(d.city||'')),rr('Ticket',d.tName+' - $'+d.tPrice.toLocaleString('es-CL')),rr('Cantidad',''+d.tQty),rr('Cobro',d.payM==='fintoc'?'Transferencia':'MercadoPago'));
+    const pb=document.createElement('button');pb.className='btn btn-primary btn-lg';pb.style.width='100%';pb.textContent='Publicar Evento';pb.onclick=()=>{showToast('Evento publicado!');S.cStep=0;setTimeout(()=>navigate('events'),1200)};
+    wrap.append(h1,rc,pb);el.append(wrap);return;
+  }
+  // Step indicator
+  const si=document.createElement('div');si.className='text-sm text-gray';si.style.marginBottom='8px';si.textContent='Paso '+(s+1)+' de 6';
+  const prog=document.createElement('div');prog.className='wizard-progress';
+  for(let i=0;i<6;i++){const dot=document.createElement('div');dot.className='wizard-dot'+(i<s?' done':'')+(i===s?' active':'');prog.append(dot)}
+  wrap.append(si,prog);
+  // Steps
+  const content=document.createElement('div');
+  if(s===0){
+    const h=document.createElement('h2');h.className='font-display text-3xl font-black';h.style.marginBottom='24px';h.textContent='Tipo de Evento';
+    const opts=document.createElement('div');opts.style.cssText='display:flex;flex-direction:column;gap:16px';
+    [{k:'venta',n:'Con venta',d:'Define precio y stock para tus entradas.',c:'var(--green)'},{k:'invitacion',n:'Solo invitaciones',d:'Ideal para eventos privados o corporativos.',c:'rgba(168,85,247,.8)'}].forEach(o=>{
+      const c=document.createElement('div');c.className='wizard-card'+(d.type===o.k?' selected':'');c.onclick=()=>{S.cData.type=o.k;renderCreate()};
+      const tag=document.createElement('span');tag.className='chip btn-sm';tag.style.cssText='background:'+o.c+';color:white;border:none;margin-bottom:8px;font-size:11px';tag.textContent=o.n;
+      const p=document.createElement('p');p.className='text-gray text-sm';p.textContent=o.d;c.append(tag,p);opts.append(c);
+    });content.append(h,opts);
+  }else if(s===1){
+    const h=document.createElement('h2');h.className='font-display text-3xl font-black';h.style.marginBottom='24px';h.textContent='Butacas numeradas?';
+    const opts=document.createElement('div');opts.style.cssText='display:flex;flex-direction:column;gap:16px';
+    [{k:false,n:'NO cuento con butacas',d:'Fiestas, discotecas, etc.'},{k:true,n:'SI cuento con butacas',d:'Teatro, cine o similar.'}].forEach(o=>{
+      const c=document.createElement('div');c.className='wizard-card'+(d.seats===o.k?' selected':'');c.onclick=()=>{S.cData.seats=o.k;renderCreate()};
+      const t=document.createElement('h3');t.className='font-bold';t.style.marginBottom='4px';t.textContent=o.n;
+      const p=document.createElement('p');p.className='text-gray text-sm';p.textContent=o.d;c.append(t,p);opts.append(c);
+    });content.append(h,opts);
+  }else if(s===2){
+    const h=document.createElement('h2');h.className='font-display text-3xl font-black';h.style.marginBottom='24px';h.textContent='Informacion Basica';
+    const f=document.createElement('div');f.style.cssText='display:flex;flex-direction:column;gap:16px';
+    function field(l,ph,val,key,type){const w=document.createElement('div');const lb=document.createElement('label');lb.className='label';lb.textContent=l;const inp=document.createElement(type==='textarea'?'textarea':'input');inp.className=type==='textarea'?'textarea':'input';inp.placeholder=ph;inp.value=val;inp.oninput=function(){S.cData[key]=this.value};w.append(lb,inp);return w}
+    f.append(field('Nombre del evento','Ej: Festival 2026',d.name,'name'));
+    f.append(field('Descripcion','Cuenta de que se trata...',d.desc,'desc','textarea'));
+    const selW=document.createElement('div');const selL=document.createElement('label');selL.className='label';selL.textContent='Categoria';
+    const sel=document.createElement('select');sel.className='select';
+    ['musica','arte','comedia','cine','charla'].forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v.charAt(0).toUpperCase()+v.slice(1);o.selected=d.cat===v;sel.append(o)});
+    sel.onchange=function(){S.cData.cat=this.value};selW.append(selL,sel);f.append(selW);
+    content.append(h,f);
+  }else if(s===3){
+    const h=document.createElement('h2');h.className='font-display text-3xl font-black';h.style.marginBottom='24px';h.textContent='Fecha y Lugar';
+    const f=document.createElement('div');f.style.cssText='display:flex;flex-direction:column;gap:16px';
+    function field(l,ph,val,key,type){const w=document.createElement('div');const lb=document.createElement('label');lb.className='label';lb.textContent=l;const inp=document.createElement('input');inp.className='input';inp.type=type||'text';inp.placeholder=ph;inp.value=val;inp.oninput=function(){S.cData[key]=this.value};w.append(lb,inp);return w}
+    f.append(field('Fecha','','','date','date'));
+    f.append(field('Venue','Ej: Teatro Nescafe',d.venue,'venue'));
+    f.append(field('Ciudad','Ej: Santiago',d.city,'city'));
+    content.append(h,f);
+  }else if(s===4){
+    const h=document.createElement('h2');h.className='font-display text-3xl font-black';h.style.marginBottom='24px';h.textContent='Tickets y Precios';
+    const f=document.createElement('div');f.style.cssText='display:flex;flex-direction:column;gap:16px';
+    function field(l,val,key,type){const w=document.createElement('div');const lb=document.createElement('label');lb.className='label';lb.textContent=l;const inp=document.createElement('input');inp.className='input';inp.type=type||'text';inp.value=val;inp.oninput=function(){S.cData[key]=type==='number'?parseInt(this.value)||0:this.value};w.append(lb,inp);return w}
+    f.append(field('Nombre del tipo de ticket',d.tName,'tName'));
+    f.append(field('Precio (CLP)',d.tPrice,'tPrice','number'));
+    f.append(field('Cantidad disponible',d.tQty,'tQty','number'));
+    content.append(h,f);
+  }else if(s===5){
+    const h=document.createElement('h2');h.className='font-display text-3xl font-black';h.style.marginBottom='24px';h.textContent='Metodo de Cobro';
+    const opts=document.createElement('div');opts.style.cssText='display:flex;flex-direction:column;gap:16px';
+    [{k:'fintoc',n:'Transferencia Bancaria',d:'Recibe en tu cuenta'},{k:'mp',n:'MercadoPago',d:'Conecta MercadoPago'}].forEach(o=>{
+      const c=document.createElement('div');c.className='wizard-card'+(d.payM===o.k?' selected':'');c.onclick=()=>{S.cData.payM=o.k;renderCreate()};
+      const t=document.createElement('h3');t.className='font-bold';t.textContent=o.n;
+      const p=document.createElement('p');p.className='text-gray text-sm';p.textContent=o.d;c.append(t,p);opts.append(c);
+    });content.append(h,opts);
+  }
+  wrap.append(content);
+  const nb=document.createElement('div');nb.style.cssText='margin-top:32px;display:flex;justify-content:flex-end';
+  const btn=document.createElement('button');btn.className='btn btn-primary';btn.textContent=s===5?'Revisar':'Siguiente';btn.onclick=()=>{S.cStep=s+1;renderCreate()};
+  nb.append(btn);wrap.append(nb);el.append(wrap);
+}
+
+function renderFAQ(){
+  const el=document.getElementById('faqContent');el.textContent='';
+  const wrap=document.createElement('div');wrap.className='container';wrap.style.cssText='padding:64px 20px 80px;max-width:720px';
+  const hdr=document.createElement('div');hdr.className='text-center';hdr.style.marginBottom='40px';
+  const h1=document.createElement('h1');h1.className='font-display text-5xl font-black uppercase tracking-tight';h1.style.marginBottom='12px';h1.textContent='Preguntas Frecuentes';
+  const sub=document.createElement('p');sub.className='text-xl text-gray';sub.textContent='Encuentra respuestas a las preguntas mas comunes';
+  hdr.append(h1,sub);wrap.append(hdr);
+  // Search
+  const sW=document.createElement('div');sW.style.cssText='position:relative;margin-bottom:40px';
+  const sI=document.createElement('input');sI.className='input';sI.placeholder='Buscar en preguntas frecuentes...';sI.style.paddingLeft='44px';
+  sI.oninput=function(){const q=this.value.toLowerCase();wrap.querySelectorAll('.acc-item').forEach(i=>{i.style.display=i.textContent.toLowerCase().includes(q)?'':'none'})};
+  sW.append(sI);wrap.append(sW);
+  // FAQ list
+  F.forEach(cat=>{
+    const cw=document.createElement('div');cw.style.marginBottom='32px';
+    const ch=document.createElement('h2');ch.className='font-display text-xl font-bold';ch.style.marginBottom='8px';ch.textContent=cat.cat;
+    cw.append(ch);
+    cat.items.forEach(item=>{
+      const ai=document.createElement('div');ai.className='acc-item';ai.style.borderBottom='1px solid var(--gray-300)';
+      const ab=document.createElement('button');ab.style.cssText='width:100%;text-align:left;padding:20px 0;font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:center';
+      const abt=document.createElement('span');abt.textContent=item.q;
+      const abi=document.createElement('span');abi.innerHTML=IC.chev;abi.style.cssText='transition:transform .25s;flex-shrink:0;margin-left:16px';
+      ab.append(abt,abi);
+      const abd=document.createElement('div');abd.style.cssText='max-height:0;overflow:hidden;transition:max-height .3s ease';
+      const abp=document.createElement('p');abp.style.cssText='padding:0 0 20px;color:var(--gray-500);font-size:15px;line-height:1.7';abp.textContent=item.a;
+      abd.append(abp);
+      ab.onclick=()=>{const open=abd.style.maxHeight!=='0px'&&abd.style.maxHeight!=='';abd.style.maxHeight=open?'0px':'300px';abi.style.transform=open?'':'rotate(180deg)'};
+      ai.append(ab,abd);cw.append(ai);
+    });
+    wrap.append(cw);
+  });
+  // Support card
+  const sc=document.createElement('div');sc.className='card text-center';sc.style.cssText='margin-top:48px;padding:40px';
+  const sh=document.createElement('h2');sh.className='font-display text-2xl font-bold';sh.style.marginBottom='12px';sh.textContent='No encontraste lo que buscabas?';
+  const sp=document.createElement('p');sp.className='text-gray';sp.style.marginBottom='20px';sp.textContent='Nuestro equipo de soporte esta aqui para ayudarte';
+  const sb=document.createElement('button');sb.className='btn btn-primary';sb.textContent='Contactar Soporte';sb.onclick=()=>showToast('Email enviado a soporte@ket.cl');
+  sc.append(sh,sp,sb);wrap.append(sc);el.append(wrap);
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+function handleLogin(e){if(e&&e.preventDefault)e.preventDefault();S.logged=true;const b=document.getElementById('loginBtn');b.textContent='Mi Perfil';b.onclick=()=>showToast('Perfil de usuario');showToast('Sesion iniciada');if(!S.tastesDone){setTimeout(()=>renderTasteQuiz(),600)}else{const dest=S.pendingAction||'home';S.pendingAction=null;setTimeout(()=>navigate(dest),800)}}
+function handleRegister(e){if(e)e.preventDefault();showToast('Registro exitoso');setTimeout(()=>handleLogin(),600)}
+
+function renderTasteQuiz(){
+  const questions=[
+    {id:'q1',title:'Que te mueve mas?',a:{label:'The Ramones',sub:'Punk, energia cruda, garage',val:'punk'},b:{label:'Radiohead',sub:'Experimental, atmosferico, profundo',val:'experimental'}},
+    {id:'q2',title:'Tu noche ideal?',a:{label:'Festival al aire libre',sub:'Miles de personas, escenarios grandes',val:'festival'},b:{label:'Club intimo',sub:'100 personas, sonido perfecto',val:'club'}},
+    {id:'q3',title:'Un sabado perfecto?',a:{label:'Stand Up Comedy',sub:'Reir hasta que duela',val:'comedia'},b:{label:'Exposicion de arte',sub:'Contemplar, pensar, sentir',val:'arte'}},
+    {id:'q4',title:'Que prefieres?',a:{label:'Daft Punk',sub:'Electronica, beats, bailar toda la noche',val:'electronica'},b:{label:'Mon Laferte',sub:'Indie latino, letras con alma',val:'indie'}},
+    {id:'q5',title:'Para cerrar...',a:{label:'Cine bajo las estrellas',sub:'Pelicula, manta, palomitas',val:'cine'},b:{label:'Feria gastronomica',sub:'Comida, vino, descubrir sabores',val:'gastronomia'}}
+  ];
+  let step=0;
+  const answers={};
+
+  // Create fullscreen overlay
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:#000;z-index:300;overflow-y:auto';
+
+  function renderStep(){
+    overlay.textContent='';
+    if(step>=questions.length){finishQuiz();return}
+    const q=questions[step];
+    const wrap=document.createElement('div');wrap.style.cssText='min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px';
+    const inner=document.createElement('div');inner.style.cssText='max-width:560px;width:100%;animation:fadeIn .4s ease';
+
+    // Progress
+    const progW=document.createElement('div');progW.style.cssText='display:flex;gap:6px;margin-bottom:48px';
+    for(let i=0;i<questions.length;i++){
+      const dot=document.createElement('div');
+      dot.style.cssText='flex:1;height:3px;border-radius:2px;transition:background .3s;background:'+(i<step?'var(--white)':i===step?'var(--white)':'var(--gray-300)');
+      if(i===step)dot.style.opacity='.6';
+      progW.append(dot);
+    }
+    const stepLabel=document.createElement('p');stepLabel.className='text-xs text-gray uppercase tracking-wide';stepLabel.style.marginBottom='16px';stepLabel.textContent='Pregunta '+(step+1)+' de '+questions.length;
+
+    // Question
+    const h1=document.createElement('h1');h1.className='font-display text-4xl font-black';h1.style.cssText='margin-bottom:40px;line-height:1.2';h1.textContent=q.title;
+
+    // Options - two big cards side by side
+    const opts=document.createElement('div');opts.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:16px';
+
+    function makeOption(opt,side){
+      const card=document.createElement('button');
+      card.style.cssText='text-align:left;padding:28px 24px;border-radius:16px;border:2px solid var(--gray-400);background:var(--gray-100);transition:all .25s cubic-bezier(.4,0,.2,1);cursor:pointer;display:flex;flex-direction:column;gap:8px';
+      card.onmouseenter=()=>{card.style.borderColor='var(--white)';card.style.background='rgba(255,255,255,.08)';card.style.transform='translateY(-2px)'};
+      card.onmouseleave=()=>{card.style.borderColor='var(--gray-400)';card.style.background='var(--gray-100)';card.style.transform='translateY(0)'};
+      const name=document.createElement('span');name.className='font-display text-xl font-bold';name.textContent=opt.label;
+      const sub=document.createElement('span');sub.className='text-sm text-gray';sub.style.lineHeight='1.4';sub.textContent=opt.sub;
+      card.append(name,sub);
+      card.onclick=()=>{
+        answers[q.id]=opt.val;
+        card.style.borderColor='var(--white)';card.style.background='rgba(255,255,255,.12)';
+        setTimeout(()=>{step++;renderStep()},350);
+      };
+      return card;
+    }
+    opts.append(makeOption(q.a,'a'),makeOption(q.b,'b'));
+
+    // Skip
+    const skip=document.createElement('button');skip.className='text-sm text-gray';skip.style.cssText='margin-top:24px;display:block;width:100%;text-align:center;opacity:.5;transition:opacity .2s';skip.textContent='Omitir';skip.onmouseenter=()=>skip.style.opacity='1';skip.onmouseleave=()=>skip.style.opacity='.5';
+    skip.onclick=()=>{step++;renderStep()};
+
+    inner.append(progW,stepLabel,h1,opts,skip);wrap.append(inner);overlay.append(wrap);
+  }
+
+  function finishQuiz(){
+    S.tastes=answers;S.tastesDone=true;
+    overlay.textContent='';
+    const wrap=document.createElement('div');wrap.style.cssText='min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px';
+    const inner=document.createElement('div');inner.style.cssText='max-width:480px;width:100%;text-align:center;animation:fadeIn .4s ease';
+
+    // Check icon
+    const ic=document.createElement('div');ic.style.cssText='width:72px;height:72px;border-radius:50%;background:rgba(34,197,94,.15);border:2px solid rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 24px';
+    ic.innerHTML='<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>';
+
+    const h1=document.createElement('h1');h1.className='font-display text-3xl font-black';h1.style.marginBottom='12px';h1.textContent='Listo, te conocemos!';
+    const p=document.createElement('p');p.className='text-gray';p.style.cssText='margin-bottom:12px;line-height:1.6';p.textContent='Ahora KET te mostrara eventos que realmente van contigo.';
+
+    // Show taste tags
+    const tags=document.createElement('div');tags.style.cssText='display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:32px';
+    const allVals=Object.values(answers);
+    const tagLabels={punk:'Punk & Rock',experimental:'Experimental',festival:'Festivales',club:'Clubbing',comedia:'Comedia',arte:'Arte & Cultura',electronica:'Electronica',indie:'Indie Latino',cine:'Cine',gastronomia:'Gastronomia'};
+    allVals.forEach(v=>{
+      if(tagLabels[v]){const t=document.createElement('span');t.style.cssText='padding:6px 16px;border-radius:9999px;font-size:12px;font-weight:700;background:rgba(255,255,255,.08);border:1px solid var(--gray-400)';t.textContent=tagLabels[v];tags.append(t)}
+    });
+
+    const dest=S.pendingAction||'events';
+    const btn=document.createElement('button');btn.className='btn btn-primary btn-lg';btn.textContent=dest==='events'?'Explorar Eventos':'Continuar';btn.onclick=()=>{
+      overlay.remove();
+      const d=dest;S.pendingAction=null;navigate(d);
+    };
+
+    inner.append(ic,h1,p,tags,btn);wrap.append(inner);overlay.append(wrap);
+  }
+
+  document.body.append(overlay);
+  renderStep();
+}
+function handleHeaderSearch(val){if(val.length>=2)navigate('events')}
+function handleHeroSearch(val){if(val.length>=2)navigate('events')}
+function scrollCarousel(id,d){const el=document.getElementById('carousel-'+id);if(el)el.scrollBy({left:d,behavior:'smooth'})}
+function openMobileMenu(){document.getElementById('mobileMenu').classList.add('open')}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open')}
+function initReveal(){const ob=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1});document.querySelectorAll('.reveal').forEach(el=>ob.observe(el))}
+function handleResize(){document.getElementById('menuBtn').style.display=window.innerWidth<=1024?'flex':'none'}
+window.addEventListener('resize',handleResize);
+document.addEventListener('DOMContentLoaded',()=>{handleRoute();handleResize();renderHome();initReveal()});
+</script>
+</body>
+</html>
