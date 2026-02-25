@@ -19,7 +19,7 @@ interface EventCardLargeProps {
     artist: {
       name: string
       image?: string | null
-    }
+    } | null
   }
 }
 
@@ -63,7 +63,7 @@ export function EventCardLarge({ event }: EventCardLargeProps) {
             </div>
 
             {/* Artist Avatar */}
-            {event.artist.image && (
+            {event.artist?.image && (
               <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white/30">
                 <Image
                   src={event.artist.image}
@@ -81,9 +81,11 @@ export function EventCardLarge({ event }: EventCardLargeProps) {
               {event.title}
             </h3>
 
-            <p className="text-sm font-bold text-gray-300">
-              {event.artist.name}
-            </p>
+            {event.artist && (
+              <p className="text-sm font-bold text-gray-300">
+                {event.artist.name}
+              </p>
+            )}
 
             <div className="flex items-center gap-4 text-sm text-gray-400">
               <div className="flex items-center gap-1">
