@@ -9,6 +9,7 @@ import { formatDateTime } from '@/lib/format'
 
 interface Ticket {
   id: string
+  status: 'ACTIVE' | 'USED' | 'CANCELLED' | 'TRANSFERRED' | 'REFUNDED'
   event: {
     title: string
     date: string
@@ -19,11 +20,21 @@ interface Ticket {
   qrCode: string
 }
 
+// Check if event has passed
+function isEventPast(eventDateStr: string): boolean {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const eventDate = new Date(eventDateStr)
+  eventDate.setHours(0, 0, 0, 0)
+  return eventDate < today
+}
+
 export default function TicketsPage() {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming')
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -47,6 +58,12 @@ export default function TicketsPage() {
     }
   }
 
+  // Separate tickets into upcoming and past
+  const upcomingTickets = tickets.filter(t => !isEventPast(t.event.date))
+  const pastTickets = tickets.filter(t => isEventPast(t.event.date))
+
+  const displayedTickets = activeTab === 'upcoming' ? upcomingTickets : pastTickets
+
   if (status === 'loading' || loading) {
     return (
       <AppLayout>
@@ -65,9 +82,34 @@ export default function TicketsPage() {
       <PageHeader title="Mis Entradas" />
 
       <div className="p-6">
-        {tickets.length > 0 ? (
+        {/* Tabs */}
+        <div className="flex gap-2 mb-8">
+          <button
+            onClick={() => setActiveTab('upcoming')}
+            className={`px-6 py-3 rounded-full font-medium transition-colors ${
+              activeTab === 'upcoming'
+                ? 'bg-white text-black'
+                : 'bg-white/10 text-white hover:bg-white/20'
+            }`}
+          >
+            Proximos ({upcomingTickets.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('past')}
+            className={`px-6 py-3 rounded-full font-medium transition-colors ${
+              activeTab === 'past'
+                ? 'bg-white text-black'
+                : 'bg-white/10 text-white hover:bg-white/20'
+            }`}
+          >
+            Pasados ({pastTickets.length})
+          </button>
+        </div>
+
+        {/* Tickets Grid */}
+        {displayedTickets.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {tickets.map((ticket) => (
+            {displayedTickets.map((ticket) => (
               <TicketCard
                 key={ticket.id}
                 id={ticket.id}
@@ -75,20 +117,25 @@ export default function TicketsPage() {
                 eventDate={formatDateTime(ticket.event.date)}
                 venue={ticket.event.venue.name}
                 qrCode={ticket.qrCode}
+                status={ticket.status}
               />
             ))}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <p className="text-lg text-muted-foreground mb-4">
-              No tienes entradas aún
+              {activeTab === 'upcoming'
+                ? 'No tienes entradas para eventos proximos'
+                : 'No tienes entradas de eventos pasados'}
             </p>
-            <button
-              onClick={() => router.push('/events')}
-              className="text-primary hover:underline"
-            >
-              Explora eventos disponibles
-            </button>
+            {activeTab === 'upcoming' && (
+              <button
+                onClick={() => router.push('/events')}
+                className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-colors"
+              >
+                Explorar eventos
+              </button>
+            )}
           </div>
         )}
       </div>

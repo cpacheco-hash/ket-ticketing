@@ -14,6 +14,9 @@ export async function GET(request: NextRequest) {
     const params = {
       query: searchParams.get('query') || undefined,
       genreFilter: searchParams.get('genres')?.split(',') || undefined,
+      category: searchParams.get('category') || undefined,
+      quickFilter: searchParams.get('filter') || undefined,
+      isFree: searchParams.get('isFree') || undefined,
       dateFrom: searchParams.get('dateFrom') || undefined,
       dateTo: searchParams.get('dateTo') || undefined,
       priceMin: searchParams.get('priceMin') ? Number(searchParams.get('priceMin')) : undefined,
@@ -42,8 +45,46 @@ export async function GET(request: NextRequest) {
       where.genres = { hasSome: validated.genreFilter }
     }
 
+    // MVP: Category filter
+    if (params.category) {
+      where.category = params.category
+    }
+
+    // MVP: Quick filters (today, this_week, free)
+    if (params.quickFilter) {
+      const now = new Date()
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      const endOfToday = new Date(startOfToday)
+      endOfToday.setDate(endOfToday.getDate() + 1)
+
+      switch (params.quickFilter) {
+        case 'today':
+          where.date = {
+            gte: startOfToday,
+            lt: endOfToday
+          }
+          break
+        case 'this_week':
+          const endOfWeek = new Date(startOfToday)
+          endOfWeek.setDate(endOfWeek.getDate() + 7)
+          where.date = {
+            gte: startOfToday,
+            lt: endOfWeek
+          }
+          break
+        case 'free':
+          where.isFree = true
+          break
+      }
+    }
+
+    // MVP: isFree filter
+    if (params.isFree === 'true') {
+      where.isFree = true
+    }
+
     if (validated.dateFrom || validated.dateTo) {
-      where.date = {}
+      where.date = where.date || {}
       if (validated.dateFrom) where.date.gte = new Date(validated.dateFrom)
       if (validated.dateTo) where.date.lte = new Date(validated.dateTo)
     }
@@ -200,7 +241,7 @@ export async function POST(request: NextRequest) {
       slug = `${slug}-${Date.now()}`
     }
 
-    // Create event
+    // Create event with MVP fields
     const event = await prisma.event.create({
       data: {
         title: body.title,
@@ -208,6 +249,7 @@ export async function POST(request: NextRequest) {
         slug: slug,
         artistId: artistId,
         venueId: venueId,
+        organizerId: session.user.id, // MVP: Associate organizer
         date: new Date(body.date),
         doors: new Date(body.doors || body.doorsOpen || body.date),
         price: body.price,
@@ -216,7 +258,17 @@ export async function POST(request: NextRequest) {
         availableTickets: body.totalTickets,
         images: body.images || [],
         genres: body.genres || [],
-        status: body.status || 'ON_SALE'
+        status: body.status || 'ON_SALE',
+        // MVP Fields
+        category: body.category || 'OTRO',
+        isFree: body.isFree || body.price === 0,
+        maxCapacity: body.maxCapacity || body.totalTickets,
+        registrationOpen: body.registrationOpen ?? true,
+        duration: body.duration || null,
+        minAge: body.minAge || null,
+        targetAudience: body.targetAudience || null,
+        directions: body.directions || null,
+        accessibility: body.accessibility || null
       },
       include: {
         venue: true,

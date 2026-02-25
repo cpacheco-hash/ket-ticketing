@@ -3,6 +3,44 @@
 export const APP_NAME = 'KET'
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
+// Event Categories (MVP)
+export const EVENT_CATEGORIES = {
+  CULTURAL: 'CULTURAL',
+  MUSICA_EMERGENTE: 'MUSICA_EMERGENTE',
+  CHARLAS: 'CHARLAS',
+  EXPERIENCIAS: 'EXPERIENCIAS',
+  BARRIAL: 'BARRIAL',
+  CONCIERTO: 'CONCIERTO',
+  FESTIVAL: 'FESTIVAL',
+  OTRO: 'OTRO'
+} as const
+
+export const EVENT_CATEGORY_LABELS: Record<string, string> = {
+  CULTURAL: 'Eventos Culturales',
+  MUSICA_EMERGENTE: 'Musica Emergente',
+  CHARLAS: 'Charlas',
+  EXPERIENCIAS: 'Experiencias Abiertas',
+  BARRIAL: 'Actividades Barriales',
+  CONCIERTO: 'Conciertos',
+  FESTIVAL: 'Festivales',
+  OTRO: 'Otros'
+}
+
+// Quick Filters for MVP
+export const QUICK_FILTERS = {
+  TODAY: 'today',
+  THIS_WEEK: 'this_week',
+  FREE: 'free',
+  NEARBY: 'nearby'
+} as const
+
+export const QUICK_FILTER_LABELS: Record<string, string> = {
+  today: 'Hoy',
+  this_week: 'Esta Semana',
+  free: 'Gratis',
+  nearby: 'Cerca'
+}
+
 // Pricing
 export const PLATFORM_FEE_PERCENTAGE = 0.05 // 5%
 export const PLATFORM_FEE_FIXED = 500 // CLP $500

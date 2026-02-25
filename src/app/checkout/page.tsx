@@ -73,6 +73,17 @@ export default function CheckoutPage() {
         console.log('Order created:', order.id)
       }
 
+      // Save event info for confirmation page
+      if (items.length > 0) {
+        const firstItem = items[0]
+        sessionStorage.setItem('lastPurchasedEvent', JSON.stringify({
+          title: firstItem.eventTitle,
+          date: firstItem.eventDate.toISOString(),
+          venue: firstItem.venue,
+          address: firstItem.venue // Could be enhanced with actual address
+        }))
+      }
+
       // Clear cart
       clearCart()
 

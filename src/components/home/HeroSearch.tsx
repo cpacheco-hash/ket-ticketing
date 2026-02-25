@@ -43,7 +43,7 @@ export function HeroSearch({ initialLocation }: HeroSearchProps) {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              Próximo Evento
+              Proximo Evento
             </span>
           </h1>
 
@@ -67,13 +67,20 @@ export function HeroSearch({ initialLocation }: HeroSearchProps) {
             </div>
           )}
 
-          {/* Quick Filters */}
+          {/* Quick Filters - MVP */}
           <div className="mt-8 flex flex-wrap gap-2 justify-center">
-            <QuickFilterChip href="/events?filter=tonight">Esta noche</QuickFilterChip>
-            <QuickFilterChip href="/events?filter=weekend">Este fin de semana</QuickFilterChip>
-            <QuickFilterChip href="/events?filter=free">Eventos gratis</QuickFilterChip>
-            <QuickFilterChip href="/events?genre=rock">Rock</QuickFilterChip>
-            <QuickFilterChip href="/events?genre=electronica">Electrónica</QuickFilterChip>
+            <QuickFilterChip href="/events?filter=today">Hoy</QuickFilterChip>
+            <QuickFilterChip href="/events?filter=this_week">Esta Semana</QuickFilterChip>
+            <QuickFilterChip href="/events?filter=free">Gratis</QuickFilterChip>
+          </div>
+
+          {/* Category Filters - MVP */}
+          <div className="mt-4 flex flex-wrap gap-2 justify-center">
+            <QuickFilterChip href="/events?category=CULTURAL" variant="category">Cultural</QuickFilterChip>
+            <QuickFilterChip href="/events?category=MUSICA_EMERGENTE" variant="category">Musica Emergente</QuickFilterChip>
+            <QuickFilterChip href="/events?category=CHARLAS" variant="category">Charlas</QuickFilterChip>
+            <QuickFilterChip href="/events?category=EXPERIENCIAS" variant="category">Experiencias</QuickFilterChip>
+            <QuickFilterChip href="/events?category=BARRIAL" variant="category">Barrial</QuickFilterChip>
           </div>
         </div>
       </div>
@@ -81,12 +88,22 @@ export function HeroSearch({ initialLocation }: HeroSearchProps) {
   )
 }
 
-function QuickFilterChip({ href, children }: { href: string; children: React.ReactNode }) {
+function QuickFilterChip({
+  href,
+  children,
+  variant = 'default'
+}: {
+  href: string
+  children: React.ReactNode
+  variant?: 'default' | 'category'
+}) {
+  const baseClasses = "px-4 py-2 rounded-full text-sm font-medium transition-colors"
+  const variantClasses = variant === 'category'
+    ? "bg-transparent hover:bg-white/10 border border-white/30 hover:border-white/50"
+    : "bg-white/10 hover:bg-white/20 border border-white/20"
+
   return (
-    <a
-      href={href}
-      className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-sm font-medium transition-colors"
-    >
+    <a href={href} className={`${baseClasses} ${variantClasses}`}>
       {children}
     </a>
   )

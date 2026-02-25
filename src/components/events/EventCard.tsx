@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { CalendarIcon, MapPinIcon } from 'lucide-react'
 import Image from 'next/image'
+import { EVENT_CATEGORY_LABELS } from '@/lib/constants'
 
 interface EventCardProps {
   id: string
@@ -12,9 +13,11 @@ interface EventCardProps {
   date: string
   image: string
   price: number
+  isFree?: boolean
+  category?: string
 }
 
-export function EventCard({ id, title, artist, venue, date, image, price }: EventCardProps) {
+export function EventCard({ id, title, artist, venue, date, image, price, isFree, category }: EventCardProps) {
   const router = useRouter()
 
   return (
@@ -34,9 +37,18 @@ export function EventCard({ id, title, artist, venue, date, image, price }: Even
           </div>
         )}
 
+        {/* Category Badge */}
+        {category && category !== 'OTRO' && (
+          <div className="absolute top-4 left-4 bg-black/70 text-white font-medium px-3 py-1 rounded-full text-xs uppercase">
+            {EVENT_CATEGORY_LABELS[category] || category}
+          </div>
+        )}
+
         {/* Price Tag Overlay */}
-        <div className="absolute top-4 right-4 bg-white text-black font-bold px-3 py-1 rounded-full text-sm">
-          ${price.toLocaleString('es-CL')}
+        <div className={`absolute top-4 right-4 font-bold px-3 py-1 rounded-full text-sm ${
+          isFree ? 'bg-green-500 text-white' : 'bg-white text-black'
+        }`}>
+          {isFree ? 'Gratis' : `$${price.toLocaleString('es-CL')}`}
         </div>
       </div>
 

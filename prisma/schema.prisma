@@ -48,6 +48,7 @@ model User {
   receivedTransfers Transfer[] @relation("TransferTo")
   waitlists   Waitlist[]
   wallet      Wallet?
+  organizedEvents Event[] @relation("OrganizerEvents")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -115,14 +116,29 @@ model Event {
   // Venue & Artist
   venueId     String
   venue       Venue    @relation(fields: [venueId], references: [id])
-  artistId    String
-  artist      Artist   @relation(fields: [artistId], references: [id])
+  artistId    String?
+  artist      Artist?  @relation(fields: [artistId], references: [id])
+
+  // Organizer (productor)
+  organizerId String?
+  organizer   User?    @relation("OrganizerEvents", fields: [organizerId], references: [id])
 
   // Event details
   date        DateTime
   doors       DateTime
   price       Int // in CLP cents
   currency    String   @default("CLP")
+
+  // MVP Fields
+  category          EventCategory @default(OTRO)
+  isFree            Boolean       @default(false)
+  maxCapacity       Int?          // Cupo maximo de inscripciones
+  registrationOpen  Boolean       @default(true)
+  duration          Int?          // Duracion en minutos
+  minAge            Int?          // Edad minima
+  targetAudience    String?       // Publico objetivo
+  directions        String?       // Como llegar
+  accessibility     String?       // Info de accesibilidad
 
   // Inventory
   totalTickets     Int
@@ -149,6 +165,8 @@ model Event {
   @@index([slug])
   @@index([date])
   @@index([status])
+  @@index([category])
+  @@index([organizerId])
   @@map("events")
 }
 
@@ -158,6 +176,17 @@ enum EventStatus {
   SOLD_OUT
   CANCELLED
   COMPLETED
+}
+
+enum EventCategory {
+  CULTURAL          // Eventos culturales
+  MUSICA_EMERGENTE  // Musica emergente
+  CHARLAS           // Charlas y conferencias
+  EXPERIENCIAS      // Experiencias abiertas
+  BARRIAL           // Actividades barriales
+  CONCIERTO         // Conciertos
+  FESTIVAL          // Festivales
+  OTRO              // Otros
 }
 
 model Venue {
@@ -323,6 +352,7 @@ model Ticket {
   // Timestamps
   activatedAt DateTime?
   scannedAt   DateTime?
+  checkedInAt DateTime? // MVP: Hora de check-in
 
   // Relations
   transfers Transfer[]
@@ -333,6 +363,7 @@ model Ticket {
   @@index([userId])
   @@index([eventId])
   @@index([qrCode])
+  @@index([status])
   @@map("tickets")
 }
 
